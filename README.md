@@ -55,8 +55,8 @@
 
 <div align="center">
 
-![Stats](https://github-readme-stats.vercel.app/api?username=VOTRE_PSEUDO&show_icons=true&theme=tokyonight&hide_border=true)
-![Langages](https://github-readme-stats.vercel.app/api/top-langs/?username=VOTRE_PSEUDO&layout=compact&theme=tokyonight&hide_border=true)
+![Stats](https://github-readme-stats.vercel.app/api?username=loan-heron&show_icons=true&theme=tokyonight&hide_border=true)
+![Langages](https://github-readme-stats.vercel.app/api/top-langs/?username=loan-heron&layout=compact&theme=tokyonight&hide_border=true)
 
 ![Streak](https://streak-stats.demolab.com/?user=VOTRE_PSEUDO&theme=tokyonight&hide_border=true)
 
