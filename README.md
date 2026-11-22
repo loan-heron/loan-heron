@@ -5,7 +5,7 @@
 -->
 
 <p align="center">
-  <img src="assets/boot.svg" width="100%" alt="Écran de démarrage HERON·OS : Loan Heron, développeur web full-stack et admin de son propre homelab. Un héron tracé au trait se dessine devant une lune ambrée." />
+  <img src="assets/boot.svg" width="100%" alt="Écran de démarrage HERON·OS : Loan Heron, développeur web full-stack et admin de son propre homelab. Un serveur du homelab se dessine au trait, ses voyants clignotent." />
 </p>
 
 <br />

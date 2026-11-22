@@ -1,6 +1,6 @@
 // Génère tous les visuels animés du profil (dossier assets/).
 // Usage : node scripts/build-svg.mjs
-// DA « HERON·OS » : terminal ambre phosphore sur graphite, héron tracé au trait.
+// DA « HERON·OS » (Heron = nom de famille) : terminal ambre phosphore sur graphite, serveur du homelab tracé au trait.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -103,31 +103,28 @@ ${defs(w, h, r, inset)}
 ${body}
 </svg>`;
 
-// Héron au trait, dans une boîte de 130 x 140. Tracé animé si draw = true.
-function heron({ draw = true, start = 0, ripples = true, color = C.amber } = {}) {
-  const parts = [
-    ['M50 76 C60 61 88 60 104 70 C95 83 68 89 52 85 Z', 3], // corps
-    ['M103 71 L117 81', 3], // queue
-    ['M53 74 C36 63 34 49 46 41 C58 33 55 25 46 22', 3], // cou en S
-    ['M48 19 L65 13', 2], // aigrette
-    ['M41 20 L11 25 L41 24', 3], // bec
-    ['M74 86 L74 128', 3], // patte tendue
-    ['M65 128 L84 128', 3], // pied
-    ['M80 86 L92 102 L81 109', 3], // patte repliée
-  ];
-  const paths = parts
-    .map(([d, sw], i) => `<path d="${d}" pathLength="1"${draw ? ` class="draw"${delay(start + i * 0.2)}` : ''} fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"/>`)
+// Serveur du homelab au trait (baie de 4 unités), dans une boîte de 130 x 140.
+// Tracé animé si draw = true, voyants qui clignotent.
+function rack({ draw = true, start = 0, color = C.amber } = {}) {
+  const d = (i) => (draw ? ` class="draw"${delay(start + i * 0.18)}` : '');
+  const stroke = `fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"`;
+  const units = [0, 1, 2, 3]
+    .map((i) => {
+      const y = 14 + i * 27;
+      const led1 = i === 2 ? C.amber : C.green;
+      return `<rect x="34" y="${y}" width="62" height="21" rx="3" ${stroke}${d(i + 1)}/>
+  <line x1="60" y1="${y + 7.5}" x2="88" y2="${y + 7.5}" stroke="${C.dim}" stroke-width="2" stroke-linecap="round" pathLength="1"${d(i + 2)}/>
+  <line x1="60" y1="${y + 13.5}" x2="80" y2="${y + 13.5}" stroke="${C.dim}" stroke-width="2" stroke-linecap="round" pathLength="1"${d(i + 2)}/>
+  <circle class="led"${delay(start + 1.2 + i * 0.35)} cx="42" cy="${y + 10.5}" r="2.8" fill="${led1}"/>
+  <circle class="led"${delay(start + 1.5 + i * 0.5)} cx="50" cy="${y + 10.5}" r="2.8" fill="${C.cyan}"/>`;
+    })
     .join('\n  ');
-  const rings = ripples
-    ? [0, 1.2, 2.4].map((t) => `<ellipse class="ripple"${delay(start + t)} cx="74" cy="129" rx="14" ry="2.6" fill="none" stroke="${C.cyan}" stroke-width="1.2" opacity="0"/>`).join('\n  ')
-    : '';
-  const headDelay = start + parts.length * 0.2;
   return `
-  ${rings}
-  <line x1="16" y1="129" x2="132" y2="129" stroke="${C.line}" stroke-width="1.5"/>
-  ${paths}
-  <circle cx="45" cy="21" r="4.4" fill="${C.bg}" stroke="${color}" stroke-width="3"${draw ? ` class="fade"${delay(headDelay)}` : ''}/>
-  <circle cx="44" cy="20.6" r="1.3" fill="${color}"${draw ? ` class="fade"${delay(headDelay)}` : ''}/>`;
+  <line x1="16" y1="130" x2="132" y2="130" stroke="${C.line}" stroke-width="1.5"/>
+  <rect x="27" y="6" width="76" height="118" rx="6" ${stroke}${d(0)}/>
+  <line x1="37" y1="124" x2="37" y2="130" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
+  <line x1="93" y1="124" x2="93" y2="130" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
+  ${units}`;
 }
 
 const prompt = (cmd, cursor = true) =>
@@ -150,10 +147,10 @@ function boot() {
 ${frame(w, h, 'heron@homelab — ~/profil')}
 <text class="fade"${delay(0.4)} x="${w - 36}" y="70" text-anchor="end" font-size="11" fill="${C.dim}" letter-spacing="1">48.44°N · 1.49°E</text>
 
-<!-- lune + héron -->
+<!-- halo + serveur du homelab -->
 <circle class="breath" cx="766" cy="176" r="118" fill="url(#moon)"/>
 <circle class="spin" cx="766" cy="176" r="140" fill="none" stroke="${C.line}" stroke-width="1.5" stroke-dasharray="2 9"/>
-<g transform="translate(672 64) scale(1.45)">${heron({ start: 0.6 })}
+<g transform="translate(672 74) scale(1.45)">${rack({ start: 0.6 })}
 </g>
 
 ${lines}
@@ -167,7 +164,7 @@ ${lines}
 <text class="in"${delay(2.8)} x="36" y="270" font-size="16" fill="${C.text}">Développeur web full-stack · admin de mon propre homelab</text>
 <text class="in"${delay(3.1)} x="36" y="296" font-size="13" fill="${C.dim}">Chartres · La Manu · Elvo Studio</text>
 <text class="in"${delay(3.5)} x="36" y="340" font-size="15">${prompt('cat README.md')}</text>
-<text class="fade"${delay(3.9)} x="${w - 36}" y="356" text-anchor="end" font-size="12" font-style="italic" fill="${C.dim}">patient comme un héron · précis comme un terminal</text>
+<text class="fade"${delay(3.9)} x="${w - 36}" y="356" text-anchor="end" font-size="12" font-style="italic" fill="${C.dim}">du front au serveur · tout fait maison</text>
 ${overlay(w, h)}`;
   write('boot.svg', svg(w, h, 'Loan Heron — développeur web full-stack et admin de son homelab', body));
 }
@@ -195,7 +192,7 @@ function about() {
   const body = `
 ${frame(w, h, 'neofetch — loan@heron')}
 <circle class="breath" cx="118" cy="178" r="92" fill="url(#moon)"/>
-<g transform="translate(36 84) scale(1.25)">${heron({ start: 0.2 })}
+<g transform="translate(36 92) scale(1.25)">${rack({ start: 0.2 })}
 </g>
 <text class="fade"${delay(1.8)} x="122" y="${h - 34}" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="4" fill="${C.amber}">HERON·OS</text>
 
@@ -339,7 +336,7 @@ ${frame(w, h, 'heron@homelab — fin de session')}
 <text class="in"${delay(1.2)} x="36" y="150" font-size="24" font-weight="700" fill="${C.amber}">Merci d'être passé. À bientôt.<tspan class="cur" fill="${C.amber}"> █</tspan></text>
 <text class="fade"${delay(1.6)} x="36" y="182" font-size="12" fill="${C.dim}">© 2026 Loan Heron · README fait main, 100 % SVG animé</text>
 <circle class="breath" cx="788" cy="118" r="62" fill="url(#moon)"/>
-<g transform="translate(722 52) scale(.95)">${heron({ draw: false })}
+<g transform="translate(726 54) scale(.95)">${rack({ draw: false })}
 </g>
 ${overlay(w, h)}`;
   write('footer.svg', svg(w, h, "Fin de session — merci d'être passé", body));
