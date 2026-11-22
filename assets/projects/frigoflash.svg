@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="452" height="210" viewBox="0 0 452 210" role="img" aria-label="FrigoFlash — Prends ton frigo en photo, reçois 3 recettes anti-gaspi. Conçue avec l'IA.">
+<title>FrigoFlash — Prends ton frigo en photo, reçois 3 recettes anti-gaspi. Conçue avec l'IA.</title>
+
+<style>
+  text{font-family:'JetBrains Mono','Fira Code','SF Mono','SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;white-space:pre}
+  .in{animation:in .55s ease both}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .fade{animation:fade .8s ease both}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .cur{animation:cur 1.05s steps(1) infinite}
+  @keyframes cur{50%{fill-opacity:0}}
+  .led{animation:led 2.4s ease-in-out infinite}
+  @keyframes led{0%,100%{opacity:1}50%{opacity:.25}}
+  .draw{stroke-dasharray:1;animation:draw 1.1s cubic-bezier(.6,0,.2,1) both}
+  @keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+  .type{transform-box:fill-box;transform-origin:0 0;animation:type 1s steps(12,end) both}
+  @keyframes type{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .ripple{transform-box:fill-box;transform-origin:center;animation:ripple 3.6s ease-out infinite}
+  @keyframes ripple{0%{transform:scale(.3);opacity:.9}100%{transform:scale(2.8);opacity:0}}
+  .sweep{animation:sweep 8s linear infinite}
+  @keyframes sweep{from{transform:translateY(-140px)}to{transform:translateY(560px)}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 60s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .breath{animation:breath 6s ease-in-out infinite}
+  @keyframes breath{0%,100%{opacity:.13}50%{opacity:.22}}
+  .bar{transform-box:fill-box;transform-origin:50% 100%;animation:bar 1.1s ease-in-out infinite alternate}
+  @keyframes bar{from{transform:scaleY(.2)}to{transform:scaleY(1)}}
+  
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+
+<defs>
+  <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1.4" fill="#fff" opacity=".028"/></pattern>
+  <linearGradient id="sweepG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#FFB000" stop-opacity="0"/>
+    <stop offset=".5" stop-color="#FFB000" stop-opacity=".055"/>
+    <stop offset="1" stop-color="#FFB000" stop-opacity="0"/>
+  </linearGradient>
+  <radialGradient id="moon" cx=".5" cy=".5" r=".5">
+    <stop offset="0" stop-color="#FFB000" stop-opacity="1"/>
+    <stop offset=".7" stop-color="#FFB000" stop-opacity=".55"/>
+    <stop offset="1" stop-color="#FFB000" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
+  <clipPath id="frame"><rect x="6" y="6" width="440" height="198" rx="12"/></clipPath>
+</defs>
+
+<rect x="6" y="6" width="440" height="198" rx="12" fill="#11151B" stroke="#232A34" stroke-width="2"/>
+<circle cx="18" cy="18" r="2.5" fill="#232A34"/><circle cx="434" cy="18" r="2.5" fill="#232A34"/><circle cx="18" cy="192" r="2.5" fill="#232A34"/><circle cx="434" cy="192" r="2.5" fill="#232A34"/>
+<circle class="led" style="animation-delay:1.20s" cx="34" cy="36" r="9" fill="#3DDC84" opacity=".22"/>
+<circle class="led" style="animation-delay:1.20s" cx="34" cy="36" r="4.5" fill="#3DDC84"/>
+<text x="50" y="40" font-size="12" fill="#6B7685">U05 · /srv/projets/frigoflash</text>
+<rect x="354" y="24" width="76" height="22" rx="11" fill="none" stroke="#3DDC84" stroke-opacity=".5" stroke-width="1.5"/>
+<text x="392" y="39" text-anchor="middle" font-size="11" letter-spacing="1" fill="#3DDC84">● PUBLIC</text>
+<line x1="20" y1="56" x2="432" y2="56" stroke="#232A34" stroke-width="1.5" stroke-dasharray="3 5"/>
+<text x="24" y="92" font-size="24" font-weight="700"><tspan fill="#FFB000">› </tspan><tspan fill="#E6EAF0">FrigoFlash</tspan></text>
+<text x="24" y="120" font-size="13" fill="#AEB6C2">Prends ton frigo en photo, reçois 3 recettes</text>
+<text x="24" y="140" font-size="13" fill="#AEB6C2">anti-gaspi. Conçue avec l'IA.</text>
+<rect x="24" y="160" width="48" height="24" rx="12" fill="#0B0D10" stroke="#232A34" stroke-width="1.5"/><text x="48" y="176.5" text-anchor="middle" font-size="11" fill="#AEB6C2">HTML</text>
+<rect x="78" y="160" width="41" height="24" rx="12" fill="#0B0D10" stroke="#232A34" stroke-width="1.5"/><text x="98.5" y="176.5" text-anchor="middle" font-size="11" fill="#AEB6C2">CSS</text>
+<rect x="125" y="160" width="90" height="24" rx="12" fill="#0B0D10" stroke="#232A34" stroke-width="1.5"/><text x="170" y="176.5" text-anchor="middle" font-size="11" fill="#AEB6C2">JavaScript</text>
+<rect x="221" y="160" width="34" height="24" rx="12" fill="#0B0D10" stroke="#232A34" stroke-width="1.5"/><text x="238" y="176.5" text-anchor="middle" font-size="11" fill="#AEB6C2">IA</text>
+<rect class="bar" style="animation-delay:0.44s;animation-duration:1.10s" x="392" y="166" width="4" height="18" rx="1" fill="#5EEAD4" opacity=".75"/>
+<rect class="bar" style="animation-delay:0.61s;animation-duration:1.40s" x="400" y="166" width="4" height="18" rx="1" fill="#5EEAD4" opacity=".75"/>
+<rect class="bar" style="animation-delay:0.78s;animation-duration:0.95s" x="408" y="166" width="4" height="18" rx="1" fill="#5EEAD4" opacity=".75"/>
+<rect class="bar" style="animation-delay:0.95s;animation-duration:1.25s" x="416" y="166" width="4" height="18" rx="1" fill="#5EEAD4" opacity=".75"/>
+<rect class="bar" style="animation-delay:1.12s;animation-duration:0.80s" x="424" y="166" width="4" height="18" rx="1" fill="#5EEAD4" opacity=".75"/>
+
+<g clip-path="url(#frame)" pointer-events="none">
+  <rect width="452" height="210" fill="url(#scan)"/>
+  <rect class="sweep" x="0" y="0" width="452" height="140" fill="url(#sweepG)"/>
+</g>
+</svg>
