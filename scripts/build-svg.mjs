@@ -1,351 +1,270 @@
-// Génère tous les visuels animés du profil (dossier assets/).
+// Génère les visuels du profil GitHub (dossier assets/), dans le style du portfolio loan-heron.fr :
+// bleu nuit / papier, accent « signal », Hanken Grotesk fine, libellés en capitales, illustrations au trait.
+// Chaque visuel existe en version sombre et claire (GitHub choisit selon le thème du visiteur).
 // Usage : node scripts/build-svg.mjs
-// DA « HERON·OS » (Heron = nom de famille) : terminal ambre phosphore sur graphite, serveur du homelab tracé au trait.
 
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'assets');
+const W = 900;
 
-// ---------------------------------------------------------------- palette
-const C = {
-  bg: '#0B0D10',
-  panel: '#11151B',
-  line: '#232A34',
-  dim: '#6B7685',
-  soft: '#AEB6C2',
-  text: '#E6EAF0',
-  amber: '#FFB000',
-  cyan: '#5EEAD4',
-  green: '#3DDC84',
-  red: '#FF5F57',
+// ---------------------------------------------------------------- thèmes (repris de css/style.css du portfolio)
+const THEMES = {
+  dark: {
+    card: '#070B14',
+    cardLine: 'rgba(243,241,236,.10)',
+    ink: '#F3F1EC',
+    text: 'rgba(243,241,236,.72)',
+    soft: 'rgba(243,241,236,.5)',
+    line: 'rgba(243,241,236,.14)',
+    accent: '#FF5B3A',
+  },
+  light: {
+    card: '#F3F1EC',
+    cardLine: 'rgba(14,22,38,.10)',
+    ink: '#0E1626',
+    text: 'rgba(14,22,38,.78)',
+    soft: 'rgba(14,22,38,.55)',
+    line: 'rgba(14,22,38,.16)',
+    accent: '#E0472A',
+  },
 };
-const FONT = `'JetBrains Mono','Fira Code','SF Mono','SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace`;
 
+const FONT_B64 = readFileSync(join(ROOT, 'scripts/fonts/hanken-grotesk-latin.woff2')).toString('base64');
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const delay = (s) => ` style="animation-delay:${s.toFixed(2)}s"`;
+const at = (s) => ` style="animation-delay:${s.toFixed(2)}s"`;
 
-function write(name, svg) {
-  const p = join(OUT, name);
-  mkdirSync(dirname(p), { recursive: true });
-  writeFileSync(p, svg.trim() + '\n', 'utf8');
+function css(t) {
+  return `<style>
+  @font-face{font-family:'HG';font-weight:100 900;src:url(data:font/woff2;base64,${FONT_B64}) format('woff2')}
+  text{font-family:'HG','Hanken Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;white-space:pre}
+  .up{animation:up 1.1s cubic-bezier(.22,1,.36,1) both}
+  @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .grow{transform-box:fill-box;transform-origin:0 50%;animation:grow 1s cubic-bezier(.22,1,.36,1) both}
+  @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .draw{stroke-dasharray:1;animation:draw 1.6s cubic-bezier(.22,1,.36,1) both}
+  @keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+  .ill polygon,.ill line,.ill circle{fill:none;stroke:${t.ink};stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+  .ill .face{stroke-opacity:.9}
+  .ill .soft{stroke:${t.soft}}
+  .ill .accent{stroke:${t.accent}}
+  .ill text{fill:${t.soft};font-size:20px;font-weight:500;letter-spacing:.18em;text-transform:uppercase}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>`;
+}
+
+function write(name, label, h, body) {
+  for (const [mode, t] of Object.entries(THEMES)) {
+    const p = join(OUT, `${name}-${mode}.svg`);
+    mkdirSync(dirname(p), { recursive: true });
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${h}" viewBox="0 0 ${W} ${h}" role="img" aria-label="${esc(label)}">
+<title>${esc(label)}</title>
+${css(t)}
+${body(t).trim()}
+</svg>
+`;
+    writeFileSync(p, svg, 'utf8');
+  }
   console.log('✓', name);
 }
 
-// ---------------------------------------------------------------- briques communes
-const css = (extra = '') => `
-<style>
-  text{font-family:${FONT};white-space:pre}
-  .in{animation:in .55s ease both}
-  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  .fade{animation:fade .8s ease both}
-  @keyframes fade{from{opacity:0}to{opacity:1}}
-  .cur{animation:cur 1.05s steps(1) infinite}
-  @keyframes cur{50%{fill-opacity:0}}
-  .led{animation:led 2.4s ease-in-out infinite}
-  @keyframes led{0%,100%{opacity:1}50%{opacity:.25}}
-  .draw{stroke-dasharray:1;animation:draw 1.1s cubic-bezier(.6,0,.2,1) both}
-  @keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
-  .type{transform-box:fill-box;transform-origin:0 0;animation:type 1s steps(12,end) both}
-  @keyframes type{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-  .ripple{transform-box:fill-box;transform-origin:center;animation:ripple 3.6s ease-out infinite}
-  @keyframes ripple{0%{transform:scale(.3);opacity:.9}100%{transform:scale(2.8);opacity:0}}
-  .sweep{animation:sweep 8s linear infinite}
-  @keyframes sweep{from{transform:translateY(-140px)}to{transform:translateY(560px)}}
-  .spin{transform-box:fill-box;transform-origin:center;animation:spin 60s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .breath{animation:breath 6s ease-in-out infinite}
-  @keyframes breath{0%,100%{opacity:.13}50%{opacity:.22}}
-  .bar{transform-box:fill-box;transform-origin:50% 100%;animation:bar 1.1s ease-in-out infinite alternate}
-  @keyframes bar{from{transform:scaleY(.2)}to{transform:scaleY(1)}}
-  ${extra}
-  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
-</style>`;
+// Libellé façon portfolio : petit trait accent + capitales espacées.
+const label = (t, x, y, txt, d = 0) => `
+<line class="grow"${at(d)} x1="${x}" y1="${y - 4}" x2="${x + 26}" y2="${y - 4}" stroke="${t.accent}" stroke-width="1.5"/>
+<text class="up"${at(d + 0.1)} x="${x + 40}" y="${y}" font-size="11" font-weight="500" letter-spacing="2.2" fill="${t.soft}">${esc(txt)}</text>`;
 
-const defs = (w, h, r = 16, inset = 0) => `
-<defs>
-  <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1.4" fill="#fff" opacity=".028"/></pattern>
-  <linearGradient id="sweepG" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="${C.amber}" stop-opacity="0"/>
-    <stop offset=".5" stop-color="${C.amber}" stop-opacity=".055"/>
-    <stop offset="1" stop-color="${C.amber}" stop-opacity="0"/>
-  </linearGradient>
-  <radialGradient id="moon" cx=".5" cy=".5" r=".5">
-    <stop offset="0" stop-color="${C.amber}" stop-opacity="1"/>
-    <stop offset=".7" stop-color="${C.amber}" stop-opacity=".55"/>
-    <stop offset="1" stop-color="${C.amber}" stop-opacity="0"/>
-  </radialGradient>
-  <filter id="glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
-  <clipPath id="frame"><rect x="${1 + inset}" y="${1 + inset}" width="${w - 2 - 2 * inset}" height="${h - 2 - 2 * inset}" rx="${r}"/></clipPath>
-</defs>`;
+// Logo « L » du portfolio (viewBox 0 0 246 303).
+const logo = (t) => `<g fill="${t.ink}"><polygon points="0,67 35,35.3 35,253.3 0,285"/><polygon points="37,33.5 74,0 74,218 37,251.5" opacity=".8"/><polygon points="89,220 245,220 199,264 43,264" opacity=".8"/><polygon points="41,266 197,266 159,302 3,302"/></g>`;
 
-const frame = (w, h, title) => `
-<rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="16" fill="${C.bg}" stroke="${C.line}" stroke-width="2"/>
-<circle cx="26" cy="21" r="6" fill="${C.red}"/>
-<circle cx="46" cy="21" r="6" fill="${C.amber}"/>
-<circle cx="66" cy="21" r="6" fill="${C.green}"/>
-<text x="${w / 2}" y="26" text-anchor="middle" font-size="13" fill="${C.dim}">${esc(title)}</text>
-<line x1="2" y1="42" x2="${w - 2}" y2="42" stroke="${C.line}" stroke-width="1.5"/>`;
+// Illustration « ordinateur + carnet » du portfolio (viewBox 0 70 640 400), tracée au chargement.
+const DESK = `<polygon class="face" points="106.9,269.8 356.9,269.8 356.9,89.8 106.9,89.8"/><polygon class="soft" points="118.9,257.8 344.9,257.8 344.9,101.8 118.9,101.8"/><line class="soft" x1="134.9" y1="123.8" x2="230.9" y2="123.8"/><line class="soft" x1="150.9" y1="138.8" x2="222.9" y2="138.8"/><line class="soft" x1="166.9" y1="153.8" x2="270.9" y2="153.8"/><line class="accent" x1="166.9" y1="168.8" x2="222.9" y2="168.8"/><line class="soft" x1="150.9" y1="183.8" x2="182.9" y2="183.8"/><line class="soft" x1="134.9" y1="198.8" x2="158.9" y2="198.8"/><line class="soft" x1="134.9" y1="213.8" x2="222.9" y2="213.8"/><line class="soft" x1="150.9" y1="228.8" x2="270.9" y2="228.8"/><line class="soft" x1="134.9" y1="243.8" x2="150.9" y2="243.8"/><polygon class="face" points="40,330 290,330 356.9,269.8 106.9,269.8"/><polygon class="face" points="40,330 290,330 290,337 40,337"/><polygon class="face" points="290,330 356.9,269.8 356.9,276.8 290,337"/><polygon class="soft" points="85.6,305.1 299.6,305.1 331.7,276.2 117.7,276.2"/><line class="soft" x1="93.7" y1="297.9" x2="307.7" y2="297.9"/><line class="soft" x1="101.7" y1="290.7" x2="315.7" y2="290.7"/><line class="soft" x1="109.7" y1="283.4" x2="323.7" y2="283.4"/><polygon class="soft" points="138.2,324.4 204.2,324.4 218.5,311.5 152.5,311.5"/><polygon class="face" points="236,452 446,452 517.3,387.8 307.3,387.8"/><polygon class="face" points="236,452 446,452 446,456 236,456"/><polygon class="face" points="446,452 517.3,387.8 517.3,391.8 446,456"/><line class="soft" x1="341" y1="452" x2="412.3" y2="387.8"/><polygon points="289.5,418.3 363.5,418.3 388.4,395.8 314.4,395.8"/><line class="soft" x1="289.5" y1="418.3" x2="388.4" y2="395.8"/><line class="soft" x1="314.4" y1="395.8" x2="363.5" y2="418.3"/><line class="soft" x1="280.5" y1="426.3" x2="344.5" y2="426.3"/><line class="soft" x1="273.4" y1="432.7" x2="319.4" y2="432.7"/><polygon class="soft" points="259.1,445.6 295.1,445.6 300.5,440.8 264.5,440.8"/><circle class="soft" cx="429.7" cy="412.7" r="15"/><line class="soft" x1="391.2" y1="423.9" x2="453.2" y2="423.9"/><line class="soft" x1="385" y1="429.5" x2="431" y2="429.5"/><polygon class="face" points="364.4,445.1 455.8,433 455.4,435.6 364,447.7"/><polygon class="face" points="364.4,445.1 351.1,448.1 364,447.7"/><line class="soft" x1="364.9" y1="129.8" x2="400.9" y2="129.8"/><text x="410.9" y="135.8">Code</text><line class="soft" x1="491.7" y1="419.9" x2="521.7" y2="419.9"/><text x="531.7" y="425.9">Design</text>`;
 
-const overlay = (w, h) => `
-<g clip-path="url(#frame)" pointer-events="none">
-  <rect width="${w}" height="${h}" fill="url(#scan)"/>
-  <rect class="sweep" x="0" y="0" width="${w}" height="140" fill="url(#sweepG)"/>
-</g>`;
-
-const svg = (w, h, label, body, extraCss = '', r = 16, inset = 0) => `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">
-<title>${esc(label)}</title>
-${css(extraCss)}
-${defs(w, h, r, inset)}
-${body}
-</svg>`;
-
-// Serveur du homelab au trait (baie de 4 unités), dans une boîte de 130 x 140.
-// Tracé animé si draw = true, voyants qui clignotent.
-function rack({ draw = true, start = 0, color = C.amber } = {}) {
-  const d = (i) => (draw ? ` class="draw"${delay(start + i * 0.18)}` : '');
-  const stroke = `fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"`;
-  const units = [0, 1, 2, 3]
-    .map((i) => {
-      const y = 14 + i * 27;
-      const led1 = i === 2 ? C.amber : C.green;
-      return `<rect x="34" y="${y}" width="62" height="21" rx="3" ${stroke}${d(i + 1)}/>
-  <line x1="60" y1="${y + 7.5}" x2="88" y2="${y + 7.5}" stroke="${C.dim}" stroke-width="2" stroke-linecap="round" pathLength="1"${d(i + 2)}/>
-  <line x1="60" y1="${y + 13.5}" x2="80" y2="${y + 13.5}" stroke="${C.dim}" stroke-width="2" stroke-linecap="round" pathLength="1"${d(i + 2)}/>
-  <circle class="led"${delay(start + 1.2 + i * 0.35)} cx="42" cy="${y + 10.5}" r="2.8" fill="${led1}"/>
-  <circle class="led"${delay(start + 1.5 + i * 0.5)} cx="50" cy="${y + 10.5}" r="2.8" fill="${C.cyan}"/>`;
-    })
-    .join('\n  ');
-  return `
-  <line x1="16" y1="130" x2="132" y2="130" stroke="${C.line}" stroke-width="1.5"/>
-  <rect x="27" y="6" width="76" height="118" rx="6" ${stroke}${d(0)}/>
-  <line x1="37" y1="124" x2="37" y2="130" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
-  <line x1="93" y1="124" x2="93" y2="130" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
-  ${units}`;
+function desk(start) {
+  let i = 0;
+  return DESK.replace(/<(polygon|line|circle)([^>]*)\/>/g, (m, tag, attrs) => {
+    const cls = attrs.match(/class="([^"]*)"/);
+    const rest = attrs.replace(/\s*class="[^"]*"/, '');
+    return `<${tag} class="draw${cls ? ' ' + cls[1] : ''}" pathLength="1"${at(start + i++ * 0.035)}${rest}/>`;
+  }).replace(/<text /g, `<text class="up"${at(start + 1.4)} `);
 }
 
-const prompt = (cmd, cursor = true) =>
-  `<tspan fill="${C.cyan}">heron@homelab</tspan><tspan fill="${C.dim}">:~$ </tspan><tspan fill="${C.text}">${esc(cmd)}</tspan>${cursor ? `<tspan class="cur" fill="${C.amber}">█</tspan>` : ''}`;
+// ---------------------------------------------------------------- 1. en-tête
+function hero() {
+  const h = 470;
+  write('hero', "Loan Heron — développeur full-stack & designer. Je conçois et je développe des sites et des applications web, du serveur jusqu'au dernier détail de l'interface.", h, (t) => `
+<rect x="1" y="1" width="${W - 2}" height="${h - 2}" rx="14" fill="${t.card}" stroke="${t.cardLine}" stroke-width="2"/>
+<g class="up"${at(0)}><g transform="translate(40 34) scale(.083)">${logo(t)}</g></g>
+<text class="up"${at(0)} x="72" y="54" font-size="15" font-weight="500" fill="${t.ink}">Loan Heron</text>
+<text class="up"${at(0.1)} x="${W - 40}" y="54" text-anchor="end" font-size="13" font-weight="400" fill="${t.soft}">loan-heron.fr  <tspan fill="${t.accent}">↗</tspan></text>
 
-// ---------------------------------------------------------------- 1. écran de démarrage
-function boot() {
-  const w = 900, h = 380;
-  const log = [
-    'Démarrage de heron-os · édition 2026',
-    'Montage de /srv/projets · 10 dépôts publics',
-    'Connexion au homelab Proxmox',
-    'Chargement de la direction artistique',
-  ];
-  const lines = log
-    .map((t, i) => `<text class="in"${delay(0.2 + i * 0.35)} x="36" y="${80 + i * 24}" font-size="13"><tspan fill="${C.dim}">[</tspan><tspan fill="${C.green}">  OK  </tspan><tspan fill="${C.dim}">]  </tspan><tspan fill="${C.soft}">${esc(t)}</tspan></text>`)
-    .join('\n');
+<text class="up"${at(0.25)} x="40" y="124" font-size="11" font-weight="500" letter-spacing="2.2" fill="${t.soft}">DÉVELOPPEUR FULL-STACK &amp; DESIGNER</text>
+<text class="up"${at(0.4)} x="34" y="222" font-size="112" font-weight="300" letter-spacing="-2" fill="${t.ink}">Loan</text>
+<text class="up"${at(0.55)} x="34" y="328" font-size="112" font-weight="300" letter-spacing="-2" fill="${t.ink}">Heron</text>
 
-  const body = `
-${frame(w, h, 'heron@homelab — ~/profil')}
-<text class="fade"${delay(0.4)} x="${w - 36}" y="70" text-anchor="end" font-size="11" fill="${C.dim}" letter-spacing="1">48.44°N · 1.49°E</text>
+<g class="ill" transform="translate(508 84) scale(.56) translate(0 -70)">${desk(0.6)}</g>
 
-<!-- halo + serveur du homelab -->
-<circle class="breath" cx="766" cy="176" r="118" fill="url(#moon)"/>
-<circle class="spin" cx="766" cy="176" r="140" fill="none" stroke="${C.line}" stroke-width="1.5" stroke-dasharray="2 9"/>
-<g transform="translate(672 74) scale(1.45)">${rack({ start: 0.6 })}
-</g>
+<text class="up"${at(0.85)} x="40" y="374" font-size="18" font-weight="400" fill="${t.ink}">Je conçois et je développe des sites et des applications web,</text>
+<text class="up"${at(0.95)} x="40" y="400" font-size="18" font-weight="400" fill="${t.accent}">du serveur jusqu'au dernier détail de l'interface.</text>
 
-${lines}
-
-<clipPath id="tclip"><rect class="type"${delay(1.8)} x="28" y="168" width="520" height="84"/></clipPath>
-<g clip-path="url(#tclip)">
-  <text x="34" y="232" font-size="64" font-weight="800" letter-spacing="4" fill="${C.amber}" filter="url(#glow)" opacity=".55">LOAN HERON</text>
-  <text x="34" y="232" font-size="64" font-weight="800" letter-spacing="4" fill="${C.amber}">LOAN HERON</text>
-</g>
-
-<text class="in"${delay(2.8)} x="36" y="270" font-size="16" fill="${C.text}">Développeur web full-stack · admin de mon propre homelab</text>
-<text class="in"${delay(3.1)} x="36" y="296" font-size="13" fill="${C.dim}">Chartres · La Manu · Elvo Studio</text>
-<text class="in"${delay(3.5)} x="36" y="340" font-size="15">${prompt('cat README.md')}</text>
-<text class="fade"${delay(3.9)} x="${w - 36}" y="356" text-anchor="end" font-size="12" font-style="italic" fill="${C.dim}">du front au serveur · tout fait maison</text>
-${overlay(w, h)}`;
-  write('boot.svg', svg(w, h, 'Loan Heron — développeur web full-stack et admin de son homelab', body));
+<line x1="40" y1="424" x2="${W - 40}" y2="424" stroke="${t.line}" stroke-width="1"/>
+<text class="up"${at(1.1)} x="40" y="446" font-size="10" font-weight="500" letter-spacing="2" fill="${t.soft}">STUDIO</text>
+<text class="up"${at(1.15)} x="110" y="446" font-size="13.5" fill="${t.ink}">Cofondateur d'Elvo Studio</text>
+<text class="up"${at(1.2)} x="400" y="446" font-size="10" font-weight="500" letter-spacing="2" fill="${t.soft}">ÉTUDES</text>
+<text class="up"${at(1.25)} x="466" y="446" font-size="13.5" fill="${t.ink}">Bachelor Développement &amp; Design, La Manu</text>`);
 }
 
-// ---------------------------------------------------------------- 2. fiche « neofetch »
+// ---------------------------------------------------------------- 2. à propos
 function about() {
-  const w = 900, h = 360;
-  const rows = [
-    ['Rôle', 'Développeur web full-stack, en formation'],
-    ['École', 'La Manu · campus de Chartres'],
-    ['Studio', 'Elvo Studio · site, admin & dashboard'],
-    ['Homelab', 'Proxmox · conteneurs LXC · HTTPS public'],
-    ['Auto-héb.', 'Supabase · drive perso · reverse proxy'],
-    ['Langages', 'JavaScript · TypeScript · Python'],
-    ['GitHub', 'depuis 2022 · 10 dépôts publics'],
-    ['En ce moment', 'React, TypeScript & déploiement'],
-  ];
-  const list = rows
-    .map(([k, v], i) => `<text class="in"${delay(0.5 + i * 0.12)} x="260" y="${136 + i * 23}" font-size="14"><tspan fill="${C.amber}">${esc(k.padEnd(13))}</tspan><tspan fill="${C.text}">${esc(v)}</tspan></text>`)
-    .join('\n');
-  const swatches = [C.bg, C.panel, C.line, C.dim, C.soft, C.text, C.amber, C.cyan, C.green, C.red]
-    .map((c, i) => `<rect class="fade"${delay(1.6 + i * 0.06)} x="${260 + i * 34}" y="${h - 46}" width="28" height="16" rx="3" fill="${c}" stroke="${C.line}"/>`)
-    .join('\n');
-
-  const body = `
-${frame(w, h, 'neofetch — loan@heron')}
-<circle class="breath" cx="118" cy="178" r="92" fill="url(#moon)"/>
-<g transform="translate(36 92) scale(1.25)">${rack({ start: 0.2 })}
-</g>
-<text class="fade"${delay(1.8)} x="122" y="${h - 34}" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="4" fill="${C.amber}">HERON·OS</text>
-
-<text class="in"${delay(0.2)} x="260" y="84" font-size="18" font-weight="700"><tspan fill="${C.amber}">loan</tspan><tspan fill="${C.dim}">@</tspan><tspan fill="${C.amber}">heron</tspan></text>
-<line class="fade"${delay(0.35)} x1="260" y1="100" x2="420" y2="100" stroke="${C.line}" stroke-width="2"/>
-${list}
-${swatches}
-${overlay(w, h)}`;
-  write('about.svg', svg(w, h, 'Fiche : développeur web full-stack en formation à La Manu, Elvo Studio, homelab Proxmox', body));
+  const h = 300;
+  write('about', "À propos — Je construis des sites et des applications de bout en bout, de la base de données à l'interface. Le design n'est pas une couche ajoutée à la fin : il guide le code dès le départ.", h, (t) => `
+${label(t, 0, 30, 'À PROPOS')}
+<text class="up"${at(0.15)} x="0" y="90" font-size="29" font-weight="300" fill="${t.ink}">Je construis des sites et des applications de bout en bout,</text>
+<text class="up"${at(0.25)} x="0" y="128" font-size="29" font-weight="300" fill="${t.ink}">de la base de données à l'interface. <tspan fill="${t.soft}">Le design n'est pas</tspan></text>
+<text class="up"${at(0.35)} x="0" y="166" font-size="29" font-weight="300" fill="${t.soft}">une couche ajoutée à la fin : il guide le code dès le départ.</text>
+<text class="up"${at(0.5)} x="0" y="226" font-size="15.5" fill="${t.text}">Étudiant en Bachelor Développement &amp; Design à La Manu, j'ai fondé Elvo Studio avec Evan</text>
+<text class="up"${at(0.55)} x="0" y="251" font-size="15.5" fill="${t.text}">pour créer des sites sur mesure pour les commerces et les indépendants :</text>
+<text class="up"${at(0.6)} x="0" y="276" font-size="15.5" fill="${t.text}">maquette, développement, mise en ligne et suivi.</text>`);
 }
 
-// ---------------------------------------------------------------- 3. stack « systemctl »
-function stack() {
-  const w = 900, h = 360;
-  const units = [
-    ['front.service', 'HTML · CSS · JavaScript · TypeScript · React · Vite · GSAP'],
-    ['back.service', 'Node.js · Express · Zod · JWT · bcrypt · Nodemailer'],
-    ['data.service', 'MySQL · PostgreSQL · Supabase'],
-    ['infra.service', 'Proxmox · LXC · Nginx Proxy Manager · Linux · Vercel'],
-    ['ia.service', 'SDK Claude · prototypage assisté par IA'],
-    ['outils.service', 'Git · GitHub · npm · Postman'],
-  ];
-  const rows = units
-    .map(([u, m], i) => {
-      const y = 128 + i * 34;
-      return `<g class="in"${delay(0.3 + i * 0.15)}>
-  <circle class="led"${delay(i * 0.4)} cx="40" cy="${y - 5}" r="4.5" fill="${C.green}"/>
-  <text x="56" y="${y}" font-size="14" fill="${C.amber}">${esc(u)}</text>
-  <text x="232" y="${y}" font-size="14" fill="${C.green}">actif</text>
-  <text x="310" y="${y}" font-size="13.5" fill="${C.text}">${esc(m)}</text>
-</g>`;
-    })
-    .join('\n');
-
-  const body = `
-${frame(w, h, 'heron@homelab — systemctl list-units --type=competence')}
-<text x="56" y="76" font-size="11" letter-spacing="2" fill="${C.dim}">UNITÉ</text>
-<text x="232" y="76" font-size="11" letter-spacing="2" fill="${C.dim}">ÉTAT</text>
-<text x="310" y="76" font-size="11" letter-spacing="2" fill="${C.dim}">MODULES</text>
-<line x1="36" y1="90" x2="${w - 36}" y2="90" stroke="${C.line}" stroke-width="1.5"/>
-${rows}
-<line x1="36" y1="${h - 52}" x2="${w - 36}" y2="${h - 52}" stroke="${C.line}" stroke-width="1.5"/>
-<text class="fade"${delay(1.4)} x="36" y="${h - 26}" font-size="12" fill="${C.dim}">6 unités chargées · <tspan fill="${C.green}">0 en échec</tspan> · toujours en apprentissage</text>
-${overlay(w, h)}`;
-  write('stack.svg', svg(w, h, 'Stack : front, back, données, infra, IA et outils', body));
+// ---------------------------------------------------------------- 3. titres de section
+function heading(name, lbl, title) {
+  const h = title ? 104 : 50;
+  write(name, title ? `${lbl} — ${title}` : lbl, h, (t) => `
+${label(t, 0, 30, lbl)}
+${title ? `<text class="up"${at(0.15)} x="0" y="84" font-size="30" font-weight="300" fill="${t.ink}">${esc(title)}</text>` : ''}`);
 }
 
-// ---------------------------------------------------------------- 4. cartes projets (unités de baie)
-function wrap(text, max) {
-  const out = [''];
-  for (const word of text.split(' ')) {
-    const cur = out[out.length - 1];
-    if ((cur + ' ' + word).trim().length > max) out.push(word);
-    else out[out.length - 1] = (cur + ' ' + word).trim();
-  }
-  return out;
+// ---------------------------------------------------------------- 4. projets phares (sites en ligne)
+function feature(p, n) {
+  const h = 212;
+  write(`projects/${p.slug}`, `${p.title} — ${p.desc}`, h, (t) => `
+<line x1="0" y1="1" x2="${W}" y2="1" stroke="${t.line}" stroke-width="1"/>
+<text class="up"${at(0)} x="0" y="44" font-size="11" font-weight="500" letter-spacing="2.2" fill="${t.soft}">${String(n).padStart(2, '0')}   ·   ${esc(p.kind)}</text>
+<text class="up"${at(0)} x="${W}" y="44" text-anchor="end" font-size="13.5" fill="${t.soft}">${esc(p.domain)}  <tspan fill="${t.accent}">↗</tspan></text>
+<text class="up"${at(0.1)} x="-2" y="100" font-size="44" font-weight="300" letter-spacing="-.5" fill="${t.ink}">${esc(p.title)}</text>
+${p.lines.map((l, i) => `<text class="up"${at(0.2 + i * 0.05)} x="0" y="${138 + i * 24}" font-size="15.5" fill="${t.text}">${esc(l)}</text>`).join('\n')}
+<text class="up"${at(0.35)} x="0" y="196" font-size="13" fill="${t.soft}">${esc(p.tags.join('  ·  '))}</text>`);
 }
 
-const STATUS = {
-  PUBLIC: C.green,
-  PRIVÉ: C.amber,
-  ÉCOLE: C.cyan,
-};
-
-function card(p, i) {
-  const w = 452, h = 210;
-  const color = STATUS[p.status];
-  const lines = wrap(p.desc, 46);
-  if (lines.length > 2) throw new Error(`Description trop longue : ${p.slug}`);
-  let x = 24;
-  const chips = p.stack
-    .map((s) => {
-      const cw = Math.round(s.length * 7 + 20);
-      const g = `<rect x="${x}" y="160" width="${cw}" height="24" rx="12" fill="${C.bg}" stroke="${C.line}" stroke-width="1.5"/><text x="${x + cw / 2}" y="176.5" text-anchor="middle" font-size="11" fill="${C.soft}">${esc(s)}</text>`;
-      x += cw + 6;
-      return g;
-    })
-    .join('\n');
-  if (x > 384) throw new Error(`Trop de technos : ${p.slug}`);
-  const tag = `● ${p.status}`;
-  const tw = Math.round(tag.length * 7.2 + 18);
-  const bars = [0, 1, 2, 3, 4]
-    .map((k) => `<rect class="bar" style="animation-delay:${(k * 0.17 + i * 0.11).toFixed(2)}s;animation-duration:${(0.8 + ((k * 7 + i * 3) % 5) * 0.15).toFixed(2)}s" x="${392 + k * 8}" y="166" width="4" height="18" rx="1" fill="${C.cyan}" opacity=".75"/>`)
-    .join('\n');
-  const n = String(i + 1).padStart(2, '0');
-
-  const body = `
-<rect x="6" y="6" width="${w - 12}" height="${h - 12}" rx="12" fill="${C.panel}" stroke="${C.line}" stroke-width="2"/>
-${[[18, 18], [w - 18, 18], [18, h - 18], [w - 18, h - 18]].map(([cx, cy]) => `<circle cx="${cx}" cy="${cy}" r="2.5" fill="${C.line}"/>`).join('')}
-<circle class="led"${delay(i * 0.3)} cx="34" cy="36" r="9" fill="${color}" opacity=".22"/>
-<circle class="led"${delay(i * 0.3)} cx="34" cy="36" r="4.5" fill="${color}"/>
-<text x="50" y="40" font-size="12" fill="${C.dim}">U${n} · /srv/projets/${esc(p.slug)}</text>
-<rect x="${w - 22 - tw}" y="24" width="${tw}" height="22" rx="11" fill="none" stroke="${color}" stroke-opacity=".5" stroke-width="1.5"/>
-<text x="${w - 22 - tw / 2}" y="39" text-anchor="middle" font-size="11" letter-spacing="1" fill="${color}">${esc(tag)}</text>
-<line x1="20" y1="56" x2="${w - 20}" y2="56" stroke="${C.line}" stroke-width="1.5" stroke-dasharray="3 5"/>
-<text x="24" y="92" font-size="24" font-weight="700"><tspan fill="${C.amber}">› </tspan><tspan fill="${C.text}">${esc(p.title)}</tspan></text>
-${lines.map((l, k) => `<text x="24" y="${120 + k * 20}" font-size="13" fill="${C.soft}">${esc(l)}</text>`).join('\n')}
-${chips}
-${bars}
-${overlay(w, h)}`;
-  write(`projects/${p.slug}.svg`, svg(w, h, `${p.title} — ${p.desc}`, body, '', 12, 5));
-}
-
-export const PROJECTS = [
-  { slug: 'elvo-studio', title: 'Elvo Studio', status: 'PRIVÉ', desc: "Site vitrine, espace admin et dashboard interne d'une agence web.", stack: ['React', 'Vite', 'Express', 'Zod', 'SDK Claude'] },
-  { slug: 'le-napoleon', title: 'Le Napoléon', status: 'PUBLIC', desc: 'Site de restaurant : menu interactif, réservation et commande. API des menus.', stack: ['HTML', 'CSS', 'JS', 'Express', 'PostgreSQL'] },
-  { slug: 'budjet-api', title: 'Budjet · API REST', status: 'PUBLIC', desc: 'Authentification, produits et commandes. Mots de passe bcrypt, sessions JWT.', stack: ['Node.js', 'Express 5', 'MySQL', 'JWT'] },
-  { slug: 'watchlist', title: 'WatchList', status: 'PUBLIC', desc: 'Liste de films : filtres, recherche et tri. API Express branchée sur Supabase.', stack: ['JavaScript', 'Express', 'Supabase'] },
-  { slug: 'frigoflash', title: 'FrigoFlash', status: 'PUBLIC', desc: "Prends ton frigo en photo, reçois 3 recettes anti-gaspi. Conçue avec l'IA.", stack: ['HTML', 'CSS', 'JavaScript', 'IA'] },
-  { slug: 'arena-zero', title: 'Arena Zéro', status: 'PUBLIC', desc: "Connexion / inscription d'une communauté e-sport fictive. API Node + MySQL.", stack: ['JavaScript', 'Express', 'MySQL', 'JWT'] },
-  { slug: 'donjon-gobelins', title: 'Le Donjon des Gobelins', status: 'ÉCOLE', desc: 'RPG textuel en console : 3 salles, 3 monstres, potions et XP. En équipe.', stack: ['Python'] },
-  { slug: 'memory', title: 'Memory', status: 'PUBLIC', desc: 'Le jeu de paires classique, en HTML, CSS et JavaScript pur.', stack: ['HTML', 'CSS', 'JavaScript'] },
+const FEATURED = [
+  {
+    slug: 'halteo', title: 'Halteo', kind: 'APPLICATION WEB · FULL-STACK', domain: 'halteo.loan-heron.fr',
+    desc: "Application d'entraînement complète : exercices filtrables par muscle, comptes, programmes, records et coach IA.",
+    lines: ["Application d'entraînement complète : bibliothèque d'exercices filtrable par muscle,", 'comptes utilisateurs, programmes, suivi des records et coach IA.'],
+    tags: ['Comptes', 'Base de données', 'Coach IA', 'Application installable'],
+  },
+  {
+    slug: 'elvo-studio', title: 'Elvo Studio', kind: 'SITE VITRINE · STUDIO', domain: 'elvo-studio.fr',
+    desc: "Le site d'Elvo Studio : offres et tarifs, réalisations, méthode de travail et demande de devis.",
+    lines: ["Le site d'Elvo Studio, mon studio de création de sites web avec Evan : offres et tarifs,", 'réalisations, méthode de travail et demande de devis.'],
+    tags: ['Site vitrine', 'Administration', 'Formulaires', 'Hébergement'],
+  },
 ];
 
-// ---------------------------------------------------------------- 5. titres de section
-function section(n, title, total = 5) {
-  const w = 900, h = 60;
-  const titleEnd = 112 + title.length * (16 * 0.62 + 3);
-  const x1 = Math.round(titleEnd + 24), x2 = w - 96;
-  const dist = x2 - x1;
-  const extra = `.dot{animation:travel 4.5s cubic-bezier(.5,0,.5,1) infinite}
-  @keyframes travel{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(${dist}px);opacity:0}}`;
-  const body = `
-<rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="12" fill="${C.bg}" stroke="${C.line}" stroke-width="2"/>
-<rect x="18" y="17" width="78" height="26" rx="13" fill="none" stroke="${C.amber}" stroke-opacity=".55" stroke-width="1.5"/>
-<text x="57" y="34.5" text-anchor="middle" font-size="12" letter-spacing="2" fill="${C.amber}">LOG ${String(n).padStart(2, '0')}</text>
-<text x="112" y="36" font-size="16" font-weight="700" letter-spacing="3" fill="${C.text}">${esc(title)}</text>
-<line x1="${x1}" y1="30" x2="${x2}" y2="30" stroke="${C.line}" stroke-width="1.5"/>
-<circle class="dot" cx="${x1}" cy="30" r="3.5" fill="${C.amber}"/>
-<text x="${w - 22}" y="35" text-anchor="end" font-size="12" fill="${C.dim}">${String(n).padStart(2, '0')} / ${String(total).padStart(2, '0')}</text>`;
-  write(`sections/${String(n).padStart(2, '0')}.svg`, svg(w, h, `${n}. ${title}`, body, extra, 12));
+// ---------------------------------------------------------------- 5. projets d'école (lignes compactes)
+function row(p, n) {
+  const h = 64;
+  write(`projects/${p.slug}`, `${p.title} — ${p.desc} (${p.tags.join(', ')})`, h, (t) => `
+<line x1="0" y1="1" x2="${W}" y2="1" stroke="${t.line}" stroke-width="1"/>
+<text class="up"${at(0)} x="0" y="39" font-size="12" font-weight="500" letter-spacing="1.5" fill="${t.soft}">${String(n).padStart(2, '0')}</text>
+<text class="up"${at(0.05)} x="52" y="40" font-size="21" font-weight="400" fill="${t.ink}">${esc(p.title)}</text>
+<text class="up"${at(0.1)} x="318" y="39" font-size="14.5" fill="${t.text}">${esc(p.desc)}</text>
+<text class="up"${at(0.15)} x="${p.link ? W - 30 : W}" y="39" text-anchor="end" font-size="12.5" fill="${t.soft}">${esc(p.tags.join(' · '))}</text>
+${p.link ? `<text class="up"${at(0.2)} x="${W}" y="40" text-anchor="end" font-size="15" fill="${t.accent}">↗</text>` : ''}`);
 }
 
-// ---------------------------------------------------------------- 6. pied de page
-function footer() {
-  const w = 900, h = 210;
-  const body = `
-${frame(w, h, 'heron@homelab — fin de session')}
-<text class="in"${delay(0.2)} x="36" y="82" font-size="15">${prompt('exit', false)}</text>
-<text class="in"${delay(0.7)} x="36" y="108" font-size="13" fill="${C.dim}">déconnexion de github.com/loan-heron…</text>
-<text class="in"${delay(1.2)} x="36" y="150" font-size="24" font-weight="700" fill="${C.amber}">Merci d'être passé. À bientôt.<tspan class="cur" fill="${C.amber}"> █</tspan></text>
-<text class="fade"${delay(1.6)} x="36" y="182" font-size="12" fill="${C.dim}">© 2026 Loan Heron · README fait main, 100 % SVG animé</text>
-<circle class="breath" cx="788" cy="118" r="62" fill="url(#moon)"/>
-<g transform="translate(726 54) scale(.95)">${rack({ draw: false })}
-</g>
-${overlay(w, h)}`;
-  write('footer.svg', svg(w, h, "Fin de session — merci d'être passé", body));
+export const SCHOOL = [
+  { slug: 'le-napoleon', title: 'Le Napoléon', desc: "Site et API d'un restaurant", tags: ['HTML', 'Express', 'PostgreSQL'], link: true },
+  { slug: 'budjet-api', title: 'Budjet', desc: 'API REST : auth JWT, produits, commandes', tags: ['Node', 'Express', 'MySQL'], link: true },
+  { slug: 'watchlist', title: 'WatchList', desc: 'Liste de films, API branchée sur Supabase', tags: ['JS', 'Express', 'Supabase'], link: true },
+  { slug: 'frigoflash', title: 'FrigoFlash', desc: 'Trois recettes anti-gaspi depuis une photo', tags: ['HTML', 'CSS', 'JS'], link: true },
+  { slug: 'arena-zero', title: 'Arena Zéro', desc: "Accès d'une communauté e-sport fictive", tags: ['JS', 'Node', 'MySQL'], link: true },
+  { slug: 'donjon-gobelins', title: 'Donjon des Gobelins', desc: 'RPG textuel en console, en équipe', tags: ['Python'], link: false },
+];
+
+// ---------------------------------------------------------------- 6. savoir-faire (niveaux repris du portfolio)
+const SKILLS = [
+  ['Développement', [['HTML / CSS', 4], ['JavaScript', 3], ['React', 2], ['Python', 2], ['Back-end et API', 3], ['Bases de données', 3], ["Intégration d'IA", 2]]],
+  ['Design', [['Figma', 4], ['Illustrator', 2], ['InDesign', 2], ['Maquettes et prototypes', 3], ['Interfaces responsive', 4], ['Typographie et couleur', 3]]],
+  ['Mise en ligne', [['Hébergement et domaines', 3], ['Performance', 3], ['Référencement local', 2], ['Maintenance', 3]]],
+  ['Approche', [['Relation client', 4], ['Rigueur', 3], ['Travail en équipe', 4], ['Autonomie', 4]]],
+];
+
+function skills() {
+  const rowH = 32;
+  const blockTop = (g) => (g < 2 ? 86 : 86 + 64 + 7 * rowH);
+  const h = blockTop(2) + 64 + 4 * rowH + 10;
+  write('skills', 'Savoir-faire — ' + SKILLS.map(([g, items]) => `${g} : ${items.map(([n, l]) => `${n} ${l}/4`).join(', ')}`).join(' ; '), h, (t) => {
+    let out = label(t, 0, 30, 'SAVOIR-FAIRE');
+    SKILLS.forEach(([group, items], g) => {
+      const x = g % 2 === 0 ? 0 : 470;
+      const y0 = blockTop(g);
+      const d = 0.15 + g * 0.12;
+      out += `\n<text class="up"${at(d)} x="${x}" y="${y0}" font-size="21" font-weight="400" fill="${t.ink}">${esc(group)}</text>`;
+      items.forEach(([name, lvl], i) => {
+        const y = y0 + 22 + i * rowH;
+        const dd = d + 0.05 + i * 0.04;
+        out += `\n<line x1="${x}" y1="${y}" x2="${x + 430}" y2="${y}" stroke="${t.line}" stroke-width="1"/>`;
+        for (let k = 0; k < 4; k++) {
+          out += `<line class="grow"${at(dd + k * 0.05)} x1="${x + k * 13}" y1="${y + 17}" x2="${x + k * 13 + 9}" y2="${y + 17}" stroke="${k < lvl ? t.ink : t.line}" stroke-width="2"/>`;
+        }
+        out += `<text class="up"${at(dd)} x="${x + 70}" y="${y + 22}" font-size="14.5" fill="${t.text}">${esc(name)}</text>`;
+      });
+    });
+    return out;
+  });
+}
+
+// ---------------------------------------------------------------- 7. parcours
+const PATH = [
+  ["AUJOURD'HUI", 'Bachelor Développement & Design', 'La Manu'],
+  ["AUJOURD'HUI", 'Fondateur', 'Elvo Studio'],
+  ["AUJOURD'HUI", 'Caissier, CDI étudiant', 'Carrefour'],
+  ['LYCÉE', 'Baccalauréat, spécialités NSI, SI et mathématiques', 'Lycée Jehan de Beauce'],
+  ['SECONDE', "Stage de développeur d'applications", 'EBP'],
+  ['ENGAGEMENT', 'Cadets de la Gendarmerie', 'Après le Service national universel'],
+];
+
+function path() {
+  const top = 116, rowH = 62;
+  const h = top + PATH.length * rowH + 4;
+  write('parcours', 'Parcours — ' + PATH.map(([w, a, b]) => `${w.toLowerCase()} : ${a}, ${b}`).join(' ; '), h, (t) => {
+    let out = `${label(t, 0, 30, 'PARCOURS')}
+<text class="up"${at(0.15)} x="0" y="84" font-size="30" font-weight="300" fill="${t.ink}">Formation, terrain et engagement.</text>`;
+    PATH.forEach(([when, what, where], i) => {
+      const y = top + i * rowH;
+      const d = 0.25 + i * 0.07;
+      out += `
+<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${t.line}" stroke-width="1"/>
+<text class="up"${at(d)} x="0" y="${y + 36}" font-size="10.5" font-weight="500" letter-spacing="2" fill="${t.soft}">${esc(when)}</text>
+<text class="up"${at(d)} x="190" y="${y + 28}" font-size="17" font-weight="400" fill="${t.ink}">${esc(what)}</text>
+<text class="up"${at(d + 0.03)} x="190" y="${y + 50}" font-size="13.5" fill="${t.soft}">${esc(where)}</text>`;
+    });
+    return out;
+  });
+}
+
+// ---------------------------------------------------------------- 8. contact
+function contact() {
+  const h = 150;
+  write('contact', 'Contact — Un projet, un stage ou une alternance ? Écrivez-moi.', h, (t) => `
+${label(t, 0, 30, 'CONTACT')}
+<text class="up"${at(0.15)} x="-2" y="92" font-size="40" font-weight="300" letter-spacing="-.5" fill="${t.ink}">Un projet, un stage ou une alternance ?</text>
+<text class="up"${at(0.3)} x="-2" y="140" font-size="40" font-weight="300" letter-spacing="-.5" fill="${t.accent}">Écrivez-moi.</text>`);
 }
 
 // ---------------------------------------------------------------- build
-boot();
+rmSync(OUT, { recursive: true, force: true });
+hero();
 about();
-stack();
-PROJECTS.forEach(card);
-['QUI SUIS-JE', 'STACK', 'PROJETS', 'STATISTIQUES', 'CONTACT'].forEach((t, i) => section(i + 1, t));
-footer();
+heading('h-projets', 'PROJETS — DÉVELOPPEMENT', 'Des projets en ligne, utilisés pour de vrai.');
+FEATURED.forEach((p, i) => feature(p, i + 1));
+heading('h-ecole', "PROJETS D'ÉCOLE");
+SCHOOL.forEach((p, i) => row(p, i + 3));
+skills();
+path();
+contact();

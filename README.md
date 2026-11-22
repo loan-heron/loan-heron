@@ -1,68 +1,83 @@
 <!--
-  HERON·OS — profil de Loan Heron
-  Les visuels du dossier assets/ sont générés par : node scripts/build-svg.mjs
-  (modifie les textes / projets dans ce script, relance-le, puis pousse.)
+  Profil de Loan Heron — même direction artistique que loan-heron.fr
+  Les visuels (versions sombre et claire) sont générés par : node scripts/build-svg.mjs
 -->
 
-<p align="center">
-  <img src="assets/boot.svg" width="100%" alt="Écran de démarrage HERON·OS : Loan Heron, développeur web full-stack et admin de son propre homelab. Un serveur du homelab se dessine au trait, ses voyants clignotent." />
+<a href="https://loan-heron.fr">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg" />
+    <img src="assets/hero-light.svg" width="100%" alt="Loan Heron — développeur full-stack et designer. Je conçois et je développe des sites et des applications web, du serveur jusqu'au dernier détail de l'interface. Cofondateur d'Elvo Studio, Bachelor Développement et Design à La Manu." />
+  </picture>
+</a>
+
+<br /><br />
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/about-dark.svg" />
+  <img src="assets/about-light.svg" width="100%" alt="À propos — Je construis des sites et des applications de bout en bout, de la base de données à l'interface. Le design n'est pas une couche ajoutée à la fin : il guide le code dès le départ." />
+</picture>
+
+<br /><br />
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/h-projets-dark.svg" />
+  <img src="assets/h-projets-light.svg" width="100%" alt="Projets — développement : des projets en ligne, utilisés pour de vrai." />
+</picture>
+
+<a href="https://halteo.loan-heron.fr">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/projects/halteo-dark.svg" />
+    <img src="assets/projects/halteo-light.svg" width="100%" alt="Halteo — application d'entraînement complète : exercices filtrables par muscle, comptes, programmes, records et coach IA." />
+  </picture>
+</a>
+<a href="https://elvo-studio.fr">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/projects/elvo-studio-dark.svg" />
+    <img src="assets/projects/elvo-studio-light.svg" width="100%" alt="Elvo Studio — le site du studio : offres et tarifs, réalisations, méthode de travail et demande de devis." />
+  </picture>
+</a>
+
+<br /><br />
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/h-ecole-dark.svg" />
+  <img src="assets/h-ecole-light.svg" width="100%" alt="Projets d'école" />
+</picture>
+
+<a href="https://github.com/loan-heron/lenapoleon"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects/le-napoleon-dark.svg" /><img src="assets/projects/le-napoleon-light.svg" width="100%" alt="Le Napoléon — site et API d'un restaurant" /></picture></a>
+<a href="https://github.com/loan-heron/api"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects/budjet-api-dark.svg" /><img src="assets/projects/budjet-api-light.svg" width="100%" alt="Budjet — API REST : authentification JWT, produits, commandes" /></picture></a>
+<a href="https://github.com/loan-heron/API-WatchList"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects/watchlist-dark.svg" /><img src="assets/projects/watchlist-light.svg" width="100%" alt="WatchList — liste de films, API branchée sur Supabase" /></picture></a>
+<a href="https://github.com/loan-heron/FrigoFlash"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects/frigoflash-dark.svg" /><img src="assets/projects/frigoflash-light.svg" width="100%" alt="FrigoFlash — trois recettes anti-gaspi depuis une photo du frigo" /></picture></a>
+<a href="https://github.com/loan-heron/ArenaZone"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects/arena-zero-dark.svg" /><img src="assets/projects/arena-zero-light.svg" width="100%" alt="Arena Zéro — page d'accès d'une communauté e-sport fictive" /></picture></a>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects/donjon-gobelins-dark.svg" /><img src="assets/projects/donjon-gobelins-light.svg" width="100%" alt="Le Donjon des Gobelins — jeu de rôle textuel en console, projet d'équipe en Python" /></picture>
+
+<br /><br />
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/skills-dark.svg" />
+  <img src="assets/skills-light.svg" width="100%" alt="Savoir-faire — développement, design, mise en ligne et approche, avec un niveau sur 4 pour chaque compétence." />
+</picture>
+
+<br /><br />
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/parcours-dark.svg" />
+  <img src="assets/parcours-light.svg" width="100%" alt="Parcours — Bachelor Développement et Design à La Manu, fondateur d'Elvo Studio, CDI étudiant chez Carrefour, bac NSI SI maths, stage chez EBP, Cadets de la Gendarmerie." />
+</picture>
+
+<br /><br />
+
+<a href="https://loan-heron.fr/#contact">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/contact-dark.svg" />
+    <img src="assets/contact-light.svg" width="100%" alt="Contact — Un projet, un stage ou une alternance ? Écrivez-moi." />
+  </picture>
+</a>
+
+<p>
+  <a href="https://loan-heron.fr">loan-heron.fr</a> &nbsp;·&nbsp;
+  <a href="https://loan-heron.fr/#contact">Me contacter</a> &nbsp;·&nbsp;
+  <a href="https://elvo-studio.fr">Elvo Studio</a>
 </p>
 
-<br />
-
-<p align="center"><img src="assets/sections/01.svg" width="100%" alt="Log 01 — Qui suis-je" /></p>
-
-<p align="center">
-  <img src="assets/about.svg" width="100%" alt="Fiche neofetch — Rôle : développeur web full-stack en formation. École : La Manu, campus de Chartres. Studio : Elvo Studio (site, admin et dashboard). Homelab : Proxmox, conteneurs LXC, HTTPS public. Auto-hébergement : Supabase, drive perso, reverse proxy. Langages : JavaScript, TypeScript, Python. Sur GitHub depuis 2022." />
-</p>
-
-<br />
-
-<p align="center"><img src="assets/sections/02.svg" width="100%" alt="Log 02 — Stack" /></p>
-
-<p align="center">
-  <img src="assets/stack.svg" width="100%" alt="Stack — Front : HTML, CSS, JavaScript, TypeScript, React, Vite, GSAP. Back : Node.js, Express, Zod, JWT, bcrypt, Nodemailer. Données : MySQL, PostgreSQL, Supabase. Infra : Proxmox, LXC, Nginx Proxy Manager, Linux, Vercel. IA : SDK Claude. Outils : Git, GitHub, npm, Postman." />
-</p>
-
-<br />
-
-<p align="center"><img src="assets/sections/03.svg" width="100%" alt="Log 03 — Projets" /></p>
-
-<p align="center">
-<img src="assets/projects/elvo-studio.svg" width="49%" alt="Elvo Studio — site vitrine, espace admin et dashboard interne d'une agence web (dépôt privé)" /><a href="https://github.com/loan-heron/lenapoleon"><img src="assets/projects/le-napoleon.svg" width="49%" alt="Le Napoléon — site de restaurant avec menu interactif, réservation, commande et API des menus" /></a>
-<a href="https://github.com/loan-heron/api"><img src="assets/projects/budjet-api.svg" width="49%" alt="Budjet — API REST d'authentification, de produits et de commandes" /></a><a href="https://github.com/loan-heron/API-WatchList"><img src="assets/projects/watchlist.svg" width="49%" alt="WatchList — liste de films avec filtres, recherche et tri, API Express et Supabase" /></a>
-<a href="https://github.com/loan-heron/FrigoFlash"><img src="assets/projects/frigoflash.svg" width="49%" alt="FrigoFlash — prends ton frigo en photo, reçois 3 recettes anti-gaspi" /></a><a href="https://github.com/loan-heron/ArenaZone"><img src="assets/projects/arena-zero.svg" width="49%" alt="Arena Zéro — connexion et inscription d'une communauté e-sport fictive" /></a>
-<img src="assets/projects/donjon-gobelins.svg" width="49%" alt="Le Donjon des Gobelins — jeu de rôle textuel en Python, projet d'équipe" /><a href="https://github.com/loan-heron/memory"><img src="assets/projects/memory.svg" width="49%" alt="Memory — jeu de paires en HTML, CSS et JavaScript" /></a>
-</p>
-
-<p align="center">
-  <sub><code>+ aussi</code>&nbsp; <a href="https://github.com/loan-heron/les-pattes-libres">les-pattes-libres</a> · <a href="https://github.com/loan-heron/HopJob">HopJob</a> · <a href="https://github.com/loan-heron/GestionProjetCours">GestionProjetCours</a></sub>
-</p>
-
-<br />
-
-<p align="center"><img src="assets/sections/04.svg" width="100%" alt="Log 04 — Statistiques" /></p>
-
-<p align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=loan-heron&show_icons=true&hide_rank=true&count_private=true&include_all_commits=true&locale=fr&bg_color=0B0D10&title_color=FFB000&text_color=E6EAF0&icon_color=5EEAD4&border_color=232A34&border_radius=14&custom_title=heron%40homelab%20%E2%80%94%20activit%C3%A9" alt="Statistiques GitHub de loan-heron" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=loan-heron&layout=compact&locale=fr&bg_color=0B0D10&title_color=FFB000&text_color=E6EAF0&border_color=232A34&border_radius=14&custom_title=langages" alt="Langages les plus utilisés" />
-</p>
-<p align="center">
-  <img height="170" src="https://streak-stats.demolab.com/?user=loan-heron&locale=fr&background=0B0D10&border=232A34&stroke=232A34&ring=FFB000&fire=FFB000&currStreakNum=E6EAF0&sideNums=E6EAF0&currStreakLabel=FFB000&sideLabels=6B7685&dates=6B7685&border_radius=14" alt="Série de contributions" />
-</p>
-
-<br />
-
-<p align="center"><img src="assets/sections/05.svg" width="100%" alt="Log 05 — Contact" /></p>
-
-<p align="center">
-  <a href="https://github.com/loan-heron"><img src="https://img.shields.io/badge/github-loan--heron-FFB000?style=for-the-badge&logo=github&logoColor=FFB000&labelColor=0B0D10" alt="GitHub loan-heron" /></a>
-  <a href="https://github.com/loan-heron?tab=repositories"><img src="https://img.shields.io/badge/d%C3%A9p%C3%B4ts-voir%20tout-5EEAD4?style=for-the-badge&logo=files&logoColor=5EEAD4&labelColor=0B0D10" alt="Voir tous les dépôts" /></a>
-  <img src="https://komarev.com/ghpvc/?username=loan-heron&color=FFB000&style=for-the-badge&label=visites" alt="Compteur de visites" />
-</p>
-
-<br />
-
-<p align="center">
-  <img src="assets/footer.svg" width="100%" alt="Fin de session — merci d'être passé, à bientôt." />
-</p>
+<sub>© 2026 Loan Heron</sub>
