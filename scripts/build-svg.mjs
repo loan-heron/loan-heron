@@ -3,7 +3,7 @@
 // Chaque visuel existe en version sombre et claire (GitHub choisit selon le thème du visiteur).
 // Usage : node scripts/build-svg.mjs
 
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -45,6 +45,8 @@ function css(t) {
   @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .grow{transform-box:fill-box;transform-origin:0 50%;animation:grow 1s cubic-bezier(.22,1,.36,1) both}
   @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .rise{transform-box:fill-box;transform-origin:50% 100%;animation:rise .9s cubic-bezier(.22,1,.36,1) both}
+  @keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
   .draw{stroke-dasharray:1;animation:draw 1.6s cubic-bezier(.22,1,.36,1) both}
   @keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
   .ill polygon,.ill line,.ill circle{fill:none;stroke:${t.ink};stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
@@ -81,7 +83,7 @@ const label = (t, x, y, txt, d = 0) => `
 const logo = (t) => `<g fill="${t.ink}"><polygon points="0,67 35,35.3 35,253.3 0,285"/><polygon points="37,33.5 74,0 74,218 37,251.5" opacity=".8"/><polygon points="89,220 245,220 199,264 43,264" opacity=".8"/><polygon points="41,266 197,266 159,302 3,302"/></g>`;
 
 // Illustration « ordinateur + carnet » du portfolio (viewBox 0 70 640 400), tracée au chargement.
-const DESK = `<polygon class="face" points="106.9,269.8 356.9,269.8 356.9,89.8 106.9,89.8"/><polygon class="soft" points="118.9,257.8 344.9,257.8 344.9,101.8 118.9,101.8"/><line class="soft" x1="134.9" y1="123.8" x2="230.9" y2="123.8"/><line class="soft" x1="150.9" y1="138.8" x2="222.9" y2="138.8"/><line class="soft" x1="166.9" y1="153.8" x2="270.9" y2="153.8"/><line class="accent" x1="166.9" y1="168.8" x2="222.9" y2="168.8"/><line class="soft" x1="150.9" y1="183.8" x2="182.9" y2="183.8"/><line class="soft" x1="134.9" y1="198.8" x2="158.9" y2="198.8"/><line class="soft" x1="134.9" y1="213.8" x2="222.9" y2="213.8"/><line class="soft" x1="150.9" y1="228.8" x2="270.9" y2="228.8"/><line class="soft" x1="134.9" y1="243.8" x2="150.9" y2="243.8"/><polygon class="face" points="40,330 290,330 356.9,269.8 106.9,269.8"/><polygon class="face" points="40,330 290,330 290,337 40,337"/><polygon class="face" points="290,330 356.9,269.8 356.9,276.8 290,337"/><polygon class="soft" points="85.6,305.1 299.6,305.1 331.7,276.2 117.7,276.2"/><line class="soft" x1="93.7" y1="297.9" x2="307.7" y2="297.9"/><line class="soft" x1="101.7" y1="290.7" x2="315.7" y2="290.7"/><line class="soft" x1="109.7" y1="283.4" x2="323.7" y2="283.4"/><polygon class="soft" points="138.2,324.4 204.2,324.4 218.5,311.5 152.5,311.5"/><polygon class="face" points="236,452 446,452 517.3,387.8 307.3,387.8"/><polygon class="face" points="236,452 446,452 446,456 236,456"/><polygon class="face" points="446,452 517.3,387.8 517.3,391.8 446,456"/><line class="soft" x1="341" y1="452" x2="412.3" y2="387.8"/><polygon points="289.5,418.3 363.5,418.3 388.4,395.8 314.4,395.8"/><line class="soft" x1="289.5" y1="418.3" x2="388.4" y2="395.8"/><line class="soft" x1="314.4" y1="395.8" x2="363.5" y2="418.3"/><line class="soft" x1="280.5" y1="426.3" x2="344.5" y2="426.3"/><line class="soft" x1="273.4" y1="432.7" x2="319.4" y2="432.7"/><polygon class="soft" points="259.1,445.6 295.1,445.6 300.5,440.8 264.5,440.8"/><circle class="soft" cx="429.7" cy="412.7" r="15"/><line class="soft" x1="391.2" y1="423.9" x2="453.2" y2="423.9"/><line class="soft" x1="385" y1="429.5" x2="431" y2="429.5"/><polygon class="face" points="364.4,445.1 455.8,433 455.4,435.6 364,447.7"/><polygon class="face" points="364.4,445.1 351.1,448.1 364,447.7"/><line class="soft" x1="364.9" y1="129.8" x2="400.9" y2="129.8"/><text x="410.9" y="135.8">Code</text><line class="soft" x1="491.7" y1="419.9" x2="521.7" y2="419.9"/><text x="531.7" y="425.9">Design</text>`;
+const DESK = `<polygon class="face" points="106.9,269.8 356.9,269.8 356.9,89.8 106.9,89.8"/><polygon class="soft" points="118.9,257.8 344.9,257.8 344.9,101.8 118.9,101.8"/><line class="soft" x1="134.9" y1="123.8" x2="230.9" y2="123.8"/><line class="soft" x1="150.9" y1="138.8" x2="222.9" y2="138.8"/><line class="soft" x1="166.9" y1="153.8" x2="270.9" y2="153.8"/><line class="accent" x1="166.9" y1="168.8" x2="222.9" y2="168.8"/><line class="soft" x1="150.9" y1="183.8" x2="182.9" y2="183.8"/><line class="soft" x1="134.9" y1="198.8" x2="158.9" y2="198.8"/><line class="soft" x1="134.9" y1="213.8" x2="222.9" y2="213.8"/><line class="soft" x1="150.9" y1="228.8" x2="270.9" y2="228.8"/><line class="soft" x1="134.9" y1="243.8" x2="150.9" y2="243.8"/><polygon class="face" points="40,330 290,330 356.9,269.8 106.9,269.8"/><polygon class="face" points="40,330 290,330 290,337 40,337"/><polygon class="face" points="290,330 356.9,269.8 356.9,276.8 290,337"/><polygon class="soft" points="85.6,305.1 299.6,305.1 331.7,276.2 117.7,276.2"/><line class="soft" x1="93.7" y1="297.9" x2="307.7" y2="297.9"/><line class="soft" x1="101.7" y1="290.7" x2="315.7" y2="290.7"/><line class="soft" x1="109.7" y1="283.4" x2="323.7" y2="283.4"/><polygon class="soft" points="138.2,324.4 204.2,324.4 218.5,311.5 152.5,311.5"/><polygon class="face" points="236,452 446,452 517.3,387.8 307.3,387.8"/><polygon class="face" points="236,452 446,452 446,456 236,456"/><polygon class="face" points="446,452 517.3,387.8 517.3,391.8 446,456"/><line class="soft" x1="341" y1="452" x2="412.3" y2="387.8"/><polygon points="289.5,418.3 363.5,418.3 388.4,395.8 314.4,395.8"/><line class="soft" x1="289.5" y1="418.3" x2="388.4" y2="395.8"/><line class="soft" x1="314.4" y1="395.8" x2="363.5" y2="418.3"/><line class="soft" x1="280.5" y1="426.3" x2="344.5" y2="426.3"/><line class="soft" x1="273.4" y1="432.7" x2="319.4" y2="432.7"/><polygon class="soft" points="259.1,445.6 295.1,445.6 300.5,440.8 264.5,440.8"/><circle class="soft" cx="429.7" cy="412.7" r="15"/><line class="soft" x1="391.2" y1="423.9" x2="453.2" y2="423.9"/><line class="soft" x1="385" y1="429.5" x2="431" y2="429.5"/><polygon class="face" points="364.4,445.1 455.8,433 455.4,435.6 364,447.7"/><polygon class="face" points="364.4,445.1 351.1,448.1 364,447.7"/><line class="soft" x1="364.9" y1="129.8" x2="400.9" y2="129.8"/><text x="410.9" y="135.8">Code</text><line class="soft" x1="491.7" y1="419.9" x2="521.7" y2="419.9"/><text x="531.7" y="425.9">Notes</text>`;
 
 function desk(start) {
   let i = 0;
@@ -271,6 +273,97 @@ ${label(t, 0, 30, 'CONTACT')}
 <text class="up"${at(0.3)} x="-2" y="140" font-size="40" font-weight="300" letter-spacing="-.5" fill="${t.accent}">Écrivez-moi.</text>`);
 }
 
+// ---------------------------------------------------------------- 9. outils (icônes Simple Icons, licence CC0)
+const ICONS = Object.fromEntries(JSON.parse(readFileSync(join(ROOT, 'scripts/icons.json'), 'utf8')).icons.map((i) => [i.slug, i]));
+const STACK = [
+  ['Web', ['html5', 'css', 'javascript', 'typescript', 'react', 'nodedotjs']],
+  ['Données et IA', ['express', 'python', 'postgresql', 'mysql', 'supabase', 'claude']],
+  ['Infra et cyber', ['docker', 'linux', 'proxmox', 'nginx', 'wireguard', 'git']],
+];
+
+function stack() {
+  const top = 62, rowH = 60, colW = W / 6;
+  const h = top + STACK.length * rowH + 2;
+  const alt = 'Outils — ' + STACK.map(([g, s]) => `${g} : ${s.map((x) => ICONS[x].name).join(', ')}`).join(' ; ');
+  write('outils', alt, h, (t) => {
+    let out = label(t, 0, 30, 'OUTILS');
+    STACK.forEach(([, slugs], r) => {
+      const y = top + r * rowH;
+      out += `\n<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${t.line}" stroke-width="1"/>`;
+      slugs.forEach((s, c) => {
+        const x = c * colW;
+        out += `\n<g class="up"${at(0.15 + r * 0.12 + c * 0.04)}><path transform="translate(${x} ${y + 18}) scale(1)" fill="${t.ink}" d="${ICONS[s].d}"/>` +
+          `<text x="${x + 36}" y="${y + 35}" font-size="14.5" fill="${t.text}">${esc(ICONS[s].name)}</text></g>`;
+      });
+    });
+    return out;
+  });
+}
+
+// ---------------------------------------------------------------- 10. activité GitHub (scripts/stats.json, mis à jour chaque jour)
+const MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+
+function stats() {
+  const file = join(ROOT, 'scripts/stats.json');
+  if (!existsSync(file)) return;
+  const s = JSON.parse(readFileSync(file, 'utf8'));
+  const weeks = s.weeks;
+  const n = weeks.length;
+  const max = Math.max(1, ...weeks.map((w) => w.count));
+  const best = weeks.reduce((a, w, i) => (w.count > weeks[a].count ? i : a), 0);
+  const cTop = 172, cH = 104, base = cTop + cH;
+  const step = W / n, bw = Math.max(4, step - 6);
+  const langTop = base + 78;
+  const h = langTop + 26 + s.languages.length * 34;
+  const alt = `Activité GitHub — ${s.total} contributions publiques sur 12 mois, ${s.repos} dépôts publics, record de ${weeks[best].count} contributions en une semaine. Langages des dépôts publics : ${s.languages.map(([l, p]) => `${l} ${p} %`).join(', ')}.`;
+
+  write('stats', alt, h, (t) => {
+    let out = label(t, 0, 30, 'ACTIVITÉ GITHUB');
+    // Chiffres clés
+    [[s.total, 'contributions sur 12 mois'], [s.repos, 'dépôts publics'], [weeks[best].count, 'contributions en une semaine (record)']].forEach(([v, cap], i) => {
+      const x = i * 300;
+      out += `\n<text class="up"${at(0.1 + i * 0.08)} x="${x - 2}" y="98" font-size="46" font-weight="300" letter-spacing="-1" fill="${t.ink}">${v}</text>` +
+        `<text class="up"${at(0.15 + i * 0.08)} x="${x}" y="124" font-size="13.5" fill="${t.soft}">${esc(cap)}</text>`;
+    });
+    // Contributions par semaine (une seule série, une seule couleur)
+    out += `\n<text class="up"${at(0.3)} x="0" y="${cTop - 14}" font-size="10.5" font-weight="500" letter-spacing="2" fill="${t.soft}">CONTRIBUTIONS PAR SEMAINE</text>`;
+    weeks.forEach((w, i) => {
+      const x = (i * step + (step - bw) / 2).toFixed(1);
+      if (w.count === 0) {
+        out += `<rect x="${x}" y="${base - 2}" width="${bw.toFixed(1)}" height="2" rx="1" fill="${t.line}"/>`;
+      } else {
+        const bh = Math.max(4, (w.count / max) * cH);
+        out += `<rect class="rise"${at(0.35 + i * 0.012)} x="${x}" y="${(base - bh).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="${t.ink}"><title>Semaine du ${w.start} : ${w.count}</title></rect>`;
+      }
+    });
+    const bx = best * step + step / 2;
+    out += `\n<text class="up"${at(1.1)} x="${bx.toFixed(1)}" y="${(base - cH - 8).toFixed(1)}" text-anchor="${bx > W - 30 ? 'end' : 'middle'}" font-size="12.5" fill="${t.text}">${weeks[best].count}</text>`;
+    // Mois sous l'axe
+    let lastX = -99;
+    weeks.forEach((w, i) => {
+      const m = new Date(w.start + 'T00:00:00Z').getUTCMonth();
+      const prev = i ? new Date(weeks[i - 1].start + 'T00:00:00Z').getUTCMonth() : -1;
+      const x = i * step;
+      if (i > 0 && m !== prev && x - lastX > 52 && x < W - 30) {
+        out += `<text x="${x.toFixed(1)}" y="${base + 22}" font-size="11" fill="${t.soft}">${MOIS[m]}</text>`;
+        lastX = x;
+      }
+    });
+    // Langages des dépôts publics
+    out += `\n<text class="up"${at(0.5)} x="0" y="${langTop}" font-size="10.5" font-weight="500" letter-spacing="2" fill="${t.soft}">LANGAGES DES DÉPÔTS PUBLICS</text>`;
+    const barX = 150, barW = W - barX - 70;
+    s.languages.forEach(([lang, pct], i) => {
+      const y = langTop + 26 + i * 34;
+      const d = 0.6 + i * 0.08;
+      out += `\n<text class="up"${at(d)} x="0" y="${y + 5}" font-size="14.5" fill="${t.text}">${esc(lang)}</text>` +
+        `<rect x="${barX}" y="${y - 2}" width="${barW}" height="6" rx="3" fill="${t.line}"/>` +
+        `<rect class="grow"${at(d)} x="${barX}" y="${y - 2}" width="${((pct / 100) * barW).toFixed(1)}" height="6" rx="3" fill="${t.ink}"/>` +
+        `<text class="up"${at(d + 0.1)} x="${W}" y="${y + 5}" text-anchor="end" font-size="13.5" fill="${t.soft}">${String(pct).replace('.', ',')} %</text>`;
+    });
+    return out;
+  });
+}
+
 // ---------------------------------------------------------------- build
 rmSync(OUT, { recursive: true, force: true });
 hero();
@@ -280,5 +373,7 @@ FEATURED.forEach((p, i) => feature(p, i + 1));
 heading('h-ecole', "PROJETS D'ÉCOLE");
 SCHOOL.forEach((p, i) => row(p, i + FEATURED.length + 1));
 skills();
+stack();
+stats();
 path();
 contact();

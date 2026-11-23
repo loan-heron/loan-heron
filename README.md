@@ -71,6 +71,21 @@
 <br /><br />
 
 <picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/outils-dark.svg" />
+  <img src="assets/outils-light.svg" width="100%" alt="Outils — HTML, CSS, JavaScript, TypeScript, React, Node.js, Express, Python, PostgreSQL, MySQL, Supabase, Claude, Docker, Linux, Proxmox, Nginx, WireGuard, Git." />
+</picture>
+
+<br /><br />
+
+<!-- Activité GitHub : regénérée chaque jour par .github/workflows/stats.yml (données publiques) -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg" />
+  <img src="assets/stats-light.svg" width="100%" alt="Activité GitHub — contributions publiques sur 12 mois, dépôts publics et langages utilisés." />
+</picture>
+
+<br /><br />
+
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/parcours-dark.svg" />
   <img src="assets/parcours-light.svg" width="100%" alt="Parcours — Bachelor Développement et Design à La Manu, fondateur d'Elvo Studio, CDI étudiant chez Carrefour, bac NSI SI maths, stage chez EBP, Cadets de la Gendarmerie." />
 </picture>
