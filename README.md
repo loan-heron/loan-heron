@@ -6,7 +6,7 @@
 <a href="https://loan-heron.fr">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg" />
-    <img src="assets/hero-light.svg" width="100%" alt="Loan Heron — développeur full-stack et designer. Je conçois et je développe des sites et des applications web, du serveur jusqu'au dernier détail de l'interface. Cofondateur d'Elvo Studio, Bachelor Développement et Design à La Manu." />
+    <img src="assets/hero-light.svg" width="100%" alt="Loan Heron — développeur full-stack, cyber et IA. Je développe des sites et des applications web, avec la sécurité et l'IA au cœur du code. Fondateur d'Elvo Studio, Bachelor Développement et Design à La Manu." />
   </picture>
 </a>
 
@@ -14,22 +14,32 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/about-dark.svg" />
-  <img src="assets/about-light.svg" width="100%" alt="À propos — Je construis des sites et des applications de bout en bout, de la base de données à l'interface. Le design n'est pas une couche ajoutée à la fin : il guide le code dès le départ." />
+  <img src="assets/about-light.svg" width="100%" alt="À propos — Je construis des sites et des applications de bout en bout, de la base de données au serveur. La sécurité n'est pas une couche ajoutée à la fin : elle guide le code dès le départ." />
 </picture>
 
 <br /><br />
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/h-projets-dark.svg" />
-  <img src="assets/h-projets-light.svg" width="100%" alt="Projets — développement : des projets en ligne, utilisés pour de vrai." />
+  <img src="assets/h-projets-light.svg" width="100%" alt="Projets — dev, cyber, IA : des projets en ligne, utilisés pour de vrai." />
 </picture>
 
+<a href="https://breche.loan-heron.fr">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/projects/breche-dark.svg" />
+    <img src="assets/projects/breche-light.svg" width="100%" alt="Brèche — école pratique de cybersécurité : 24 modules, du terminal à l'Active Directory, chaque leçon finit sur une vraie cible isolée à réparer." />
+  </picture>
+</a>
 <a href="https://halteo.loan-heron.fr">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/projects/halteo-dark.svg" />
     <img src="assets/projects/halteo-light.svg" width="100%" alt="Halteo — application d'entraînement complète : exercices filtrables par muscle, comptes, programmes, records et coach IA." />
   </picture>
 </a>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/homelab-dark.svg" />
+  <img src="assets/projects/homelab-light.svg" width="100%" alt="Homelab et Ulysse — mon serveur personnel (virtualisation, HTTPS, bases de données, sauvegardes), administré avec Ulysse, un assistant IA." />
+</picture>
 <a href="https://elvo-studio.fr">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/projects/elvo-studio-dark.svg" />
@@ -55,7 +65,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/skills-dark.svg" />
-  <img src="assets/skills-light.svg" width="100%" alt="Savoir-faire — développement, design, mise en ligne et approche, avec un niveau sur 4 pour chaque compétence." />
+  <img src="assets/skills-light.svg" width="100%" alt="Savoir-faire — développement, IA, mise en ligne et cyber, avec un niveau sur 4 pour chaque compétence." />
 </picture>
 
 <br /><br />
@@ -77,6 +87,8 @@
 <p>
   <a href="https://loan-heron.fr">loan-heron.fr</a> &nbsp;·&nbsp;
   <a href="https://loan-heron.fr/#contact">Me contacter</a> &nbsp;·&nbsp;
+  <a href="https://www.linkedin.com/in/loan-heron">LinkedIn</a> &nbsp;·&nbsp;
+  <a href="https://breche.loan-heron.fr">Brèche</a> &nbsp;·&nbsp;
   <a href="https://elvo-studio.fr">Elvo Studio</a>
 </p>
 

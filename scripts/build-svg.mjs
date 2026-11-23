@@ -95,24 +95,24 @@ function desk(start) {
 // ---------------------------------------------------------------- 1. en-tête
 function hero() {
   const h = 470;
-  write('hero', "Loan Heron — développeur full-stack & designer. Je conçois et je développe des sites et des applications web, du serveur jusqu'au dernier détail de l'interface.", h, (t) => `
+  write('hero', "Loan Heron — développeur full-stack, cyber et IA. Je développe des sites et des applications web, avec la sécurité et l'IA au cœur du code.", h, (t) => `
 <rect x="1" y="1" width="${W - 2}" height="${h - 2}" rx="14" fill="${t.card}" stroke="${t.cardLine}" stroke-width="2"/>
 <g class="up"${at(0)}><g transform="translate(40 34) scale(.083)">${logo(t)}</g></g>
 <text class="up"${at(0)} x="72" y="54" font-size="15" font-weight="500" fill="${t.ink}">Loan Heron</text>
 <text class="up"${at(0.1)} x="${W - 40}" y="54" text-anchor="end" font-size="13" font-weight="400" fill="${t.soft}">loan-heron.fr  <tspan fill="${t.accent}">↗</tspan></text>
 
-<text class="up"${at(0.25)} x="40" y="124" font-size="11" font-weight="500" letter-spacing="2.2" fill="${t.soft}">DÉVELOPPEUR FULL-STACK &amp; DESIGNER</text>
+<text class="up"${at(0.25)} x="40" y="124" font-size="11" font-weight="500" letter-spacing="2.2" fill="${t.soft}">DÉVELOPPEUR FULL-STACK · CYBER &amp; IA</text>
 <text class="up"${at(0.4)} x="34" y="222" font-size="112" font-weight="300" letter-spacing="-2" fill="${t.ink}">Loan</text>
 <text class="up"${at(0.55)} x="34" y="328" font-size="112" font-weight="300" letter-spacing="-2" fill="${t.ink}">Heron</text>
 
 <g class="ill" transform="translate(508 84) scale(.56) translate(0 -70)">${desk(0.6)}</g>
 
-<text class="up"${at(0.85)} x="40" y="374" font-size="18" font-weight="400" fill="${t.ink}">Je conçois et je développe des sites et des applications web,</text>
-<text class="up"${at(0.95)} x="40" y="400" font-size="18" font-weight="400" fill="${t.accent}">du serveur jusqu'au dernier détail de l'interface.</text>
+<text class="up"${at(0.85)} x="40" y="374" font-size="18" font-weight="400" fill="${t.ink}">Je développe des sites et des applications web,</text>
+<text class="up"${at(0.95)} x="40" y="400" font-size="18" font-weight="400" fill="${t.accent}">avec la sécurité et l'IA au cœur du code.</text>
 
 <line x1="40" y1="424" x2="${W - 40}" y2="424" stroke="${t.line}" stroke-width="1"/>
 <text class="up"${at(1.1)} x="40" y="446" font-size="10" font-weight="500" letter-spacing="2" fill="${t.soft}">STUDIO</text>
-<text class="up"${at(1.15)} x="110" y="446" font-size="13.5" fill="${t.ink}">Cofondateur d'Elvo Studio</text>
+<text class="up"${at(1.15)} x="110" y="446" font-size="13.5" fill="${t.ink}">Fondateur d'Elvo Studio</text>
 <text class="up"${at(1.2)} x="400" y="446" font-size="10" font-weight="500" letter-spacing="2" fill="${t.soft}">ÉTUDES</text>
 <text class="up"${at(1.25)} x="466" y="446" font-size="13.5" fill="${t.ink}">Bachelor Développement &amp; Design, La Manu</text>`);
 }
@@ -120,14 +120,14 @@ function hero() {
 // ---------------------------------------------------------------- 2. à propos
 function about() {
   const h = 300;
-  write('about', "À propos — Je construis des sites et des applications de bout en bout, de la base de données à l'interface. Le design n'est pas une couche ajoutée à la fin : il guide le code dès le départ.", h, (t) => `
+  write('about', "À propos — Je construis des sites et des applications de bout en bout, de la base de données au serveur. La sécurité n'est pas une couche ajoutée à la fin : elle guide le code dès le départ.", h, (t) => `
 ${label(t, 0, 30, 'À PROPOS')}
 <text class="up"${at(0.15)} x="0" y="90" font-size="29" font-weight="300" fill="${t.ink}">Je construis des sites et des applications de bout en bout,</text>
-<text class="up"${at(0.25)} x="0" y="128" font-size="29" font-weight="300" fill="${t.ink}">de la base de données à l'interface. <tspan fill="${t.soft}">Le design n'est pas</tspan></text>
-<text class="up"${at(0.35)} x="0" y="166" font-size="29" font-weight="300" fill="${t.soft}">une couche ajoutée à la fin : il guide le code dès le départ.</text>
-<text class="up"${at(0.5)} x="0" y="226" font-size="15.5" fill="${t.text}">Étudiant en Bachelor Développement &amp; Design à La Manu, j'ai fondé Elvo Studio avec Evan</text>
-<text class="up"${at(0.55)} x="0" y="251" font-size="15.5" fill="${t.text}">pour créer des sites sur mesure pour les commerces et les indépendants :</text>
-<text class="up"${at(0.6)} x="0" y="276" font-size="15.5" fill="${t.text}">maquette, développement, mise en ligne et suivi.</text>`);
+<text class="up"${at(0.25)} x="0" y="128" font-size="29" font-weight="300" fill="${t.ink}">de la base de données au serveur. <tspan fill="${t.soft}">La sécurité n'est pas</tspan></text>
+<text class="up"${at(0.35)} x="0" y="166" font-size="29" font-weight="300" fill="${t.soft}">une couche ajoutée à la fin : elle guide le code dès le départ.</text>
+<text class="up"${at(0.5)} x="0" y="226" font-size="15.5" fill="${t.text}">Étudiant en Bachelor Développement &amp; Design à La Manu, j'ai fondé Elvo Studio pour créer</text>
+<text class="up"${at(0.55)} x="0" y="251" font-size="15.5" fill="${t.text}">des sites sur mesure pour les commerces et les indépendants : développement, mise en ligne</text>
+<text class="up"${at(0.6)} x="0" y="276" font-size="15.5" fill="${t.text}">et suivi. En parallèle : cybersécurité, IA et mon propre serveur.</text>`);
 }
 
 // ---------------------------------------------------------------- 3. titres de section
@@ -144,7 +144,7 @@ function feature(p, n) {
   write(`projects/${p.slug}`, `${p.title} — ${p.desc}`, h, (t) => `
 <line x1="0" y1="1" x2="${W}" y2="1" stroke="${t.line}" stroke-width="1"/>
 <text class="up"${at(0)} x="0" y="44" font-size="11" font-weight="500" letter-spacing="2.2" fill="${t.soft}">${String(n).padStart(2, '0')}   ·   ${esc(p.kind)}</text>
-<text class="up"${at(0)} x="${W}" y="44" text-anchor="end" font-size="13.5" fill="${t.soft}">${esc(p.domain)}  <tspan fill="${t.accent}">↗</tspan></text>
+${p.domain ? `<text class="up"${at(0)} x="${W}" y="44" text-anchor="end" font-size="13.5" fill="${t.soft}">${esc(p.domain)}  <tspan fill="${t.accent}">↗</tspan></text>` : ''}
 <text class="up"${at(0.1)} x="-2" y="100" font-size="44" font-weight="300" letter-spacing="-.5" fill="${t.ink}">${esc(p.title)}</text>
 ${p.lines.map((l, i) => `<text class="up"${at(0.2 + i * 0.05)} x="0" y="${138 + i * 24}" font-size="15.5" fill="${t.text}">${esc(l)}</text>`).join('\n')}
 <text class="up"${at(0.35)} x="0" y="196" font-size="13" fill="${t.soft}">${esc(p.tags.join('  ·  '))}</text>`);
@@ -152,15 +152,27 @@ ${p.lines.map((l, i) => `<text class="up"${at(0.2 + i * 0.05)} x="0" y="${138 + 
 
 const FEATURED = [
   {
+    slug: 'breche', title: 'Brèche', kind: 'PLATEFORME · CYBERSÉCURITÉ', domain: 'breche.loan-heron.fr',
+    desc: "Une école pratique de cybersécurité : 24 modules, du terminal à l'Active Directory, chaque leçon finit sur une vraie cible isolée à réparer.",
+    lines: ["Une école pratique de cybersécurité que j'ai créée : 24 modules, du terminal à", "l'Active Directory. Chaque leçon finit sur une vraie cible isolée, puis on répare la faille."],
+    tags: ['Labs isolés', 'Pare-feu', 'VPN', 'Docker'],
+  },
+  {
     slug: 'halteo', title: 'Halteo', kind: 'APPLICATION WEB · FULL-STACK', domain: 'halteo.loan-heron.fr',
     desc: "Application d'entraînement complète : exercices filtrables par muscle, comptes, programmes, records et coach IA.",
     lines: ["Application d'entraînement complète : bibliothèque d'exercices filtrable par muscle,", 'comptes utilisateurs, programmes, suivi des records et coach IA.'],
     tags: ['Comptes', 'Base de données', 'Coach IA', 'Application installable'],
   },
   {
+    slug: 'homelab', title: 'Homelab & Ulysse', kind: 'INFRASTRUCTURE · IA', domain: '',
+    desc: "Mon serveur personnel (virtualisation, HTTPS, bases de données, sauvegardes), administré avec Ulysse, un assistant IA.",
+    lines: ['Mon serveur personnel, qui héberge mes sites et mes projets : virtualisation, HTTPS,', "bases de données et sauvegardes automatiques. Ulysse, un assistant IA, m'aide à l'administrer."],
+    tags: ['Proxmox', 'Linux', 'Reverse proxy', 'Agent IA'],
+  },
+  {
     slug: 'elvo-studio', title: 'Elvo Studio', kind: 'SITE VITRINE · STUDIO', domain: 'elvo-studio.fr',
     desc: "Le site d'Elvo Studio : offres et tarifs, réalisations, méthode de travail et demande de devis.",
-    lines: ["Le site d'Elvo Studio, mon studio de création de sites web avec Evan : offres et tarifs,", 'réalisations, méthode de travail et demande de devis.'],
+    lines: ["Le site d'Elvo Studio, mon studio de création de sites web : offres et tarifs,", 'réalisations, méthode de travail et demande de devis.'],
     tags: ['Site vitrine', 'Administration', 'Formulaires', 'Hébergement'],
   },
 ];
@@ -188,16 +200,18 @@ export const SCHOOL = [
 
 // ---------------------------------------------------------------- 6. savoir-faire (niveaux repris du portfolio)
 const SKILLS = [
-  ['Développement', [['HTML / CSS', 4], ['JavaScript', 3], ['React', 2], ['Python', 2], ['Back-end et API', 3], ['Bases de données', 3], ["Intégration d'IA", 2]]],
-  ['Design', [['Figma', 4], ['Illustrator', 2], ['InDesign', 2], ['Maquettes et prototypes', 3], ['Interfaces responsive', 4], ['Typographie et couleur', 3]]],
+  ['Développement', [['HTML / CSS', 4], ['JavaScript', 3], ['React', 2], ['Python', 2], ['Back-end et API', 3], ['Bases de données', 3]]],
+  ['IA', [['API de modèles (LLM)', 3], ['Agents et automatisation', 3], ['Prompt engineering', 3], ['RAG et données', 2]]],
   ['Mise en ligne', [['Hébergement et domaines', 3], ['Performance', 3], ['Référencement local', 2], ['Maintenance', 3]]],
-  ['Approche', [['Relation client', 4], ['Rigueur', 3], ['Travail en équipe', 4], ['Autonomie', 4]]],
+  ['Cyber', [['Linux et serveurs', 3], ['Réseaux et VPN', 3], ['Sécurité web', 2], ["CTF et tests d'intrusion", 2]]],
 ];
 
 function skills() {
   const rowH = 32;
-  const blockTop = (g) => (g < 2 ? 86 : 86 + 64 + 7 * rowH);
-  const h = blockTop(2) + 64 + 4 * rowH + 10;
+  const topRows = Math.max(SKILLS[0][1].length, SKILLS[1][1].length);
+  const bottomRows = Math.max(SKILLS[2][1].length, SKILLS[3][1].length);
+  const blockTop = (g) => (g < 2 ? 86 : 86 + 64 + topRows * rowH);
+  const h = blockTop(2) + 64 + bottomRows * rowH + 10;
   write('skills', 'Savoir-faire — ' + SKILLS.map(([g, items]) => `${g} : ${items.map(([n, l]) => `${n} ${l}/4`).join(', ')}`).join(' ; '), h, (t) => {
     let out = label(t, 0, 30, 'SAVOIR-FAIRE');
     SKILLS.forEach(([group, items], g) => {
@@ -261,10 +275,10 @@ ${label(t, 0, 30, 'CONTACT')}
 rmSync(OUT, { recursive: true, force: true });
 hero();
 about();
-heading('h-projets', 'PROJETS — DÉVELOPPEMENT', 'Des projets en ligne, utilisés pour de vrai.');
+heading('h-projets', 'PROJETS — DEV, CYBER, IA', 'Des projets en ligne, utilisés pour de vrai.');
 FEATURED.forEach((p, i) => feature(p, i + 1));
 heading('h-ecole', "PROJETS D'ÉCOLE");
-SCHOOL.forEach((p, i) => row(p, i + 3));
+SCHOOL.forEach((p, i) => row(p, i + FEATURED.length + 1));
 skills();
 path();
 contact();

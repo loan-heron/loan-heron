@@ -18,10 +18,10 @@
   @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 <line x1="0" y1="1" x2="900" y2="1" stroke="rgba(243,241,236,.14)" stroke-width="1"/>
-<text class="up" style="animation-delay:0.00s" x="0" y="44" font-size="11" font-weight="500" letter-spacing="2.2" fill="rgba(243,241,236,.5)">02   ·   SITE VITRINE · STUDIO</text>
+<text class="up" style="animation-delay:0.00s" x="0" y="44" font-size="11" font-weight="500" letter-spacing="2.2" fill="rgba(243,241,236,.5)">04   ·   SITE VITRINE · STUDIO</text>
 <text class="up" style="animation-delay:0.00s" x="900" y="44" text-anchor="end" font-size="13.5" fill="rgba(243,241,236,.5)">elvo-studio.fr  <tspan fill="#FF5B3A">↗</tspan></text>
 <text class="up" style="animation-delay:0.10s" x="-2" y="100" font-size="44" font-weight="300" letter-spacing="-.5" fill="#F3F1EC">Elvo Studio</text>
-<text class="up" style="animation-delay:0.20s" x="0" y="138" font-size="15.5" fill="rgba(243,241,236,.72)">Le site d'Elvo Studio, mon studio de création de sites web avec Evan : offres et tarifs,</text>
+<text class="up" style="animation-delay:0.20s" x="0" y="138" font-size="15.5" fill="rgba(243,241,236,.72)">Le site d'Elvo Studio, mon studio de création de sites web : offres et tarifs,</text>
 <text class="up" style="animation-delay:0.25s" x="0" y="162" font-size="15.5" fill="rgba(243,241,236,.72)">réalisations, méthode de travail et demande de devis.</text>
 <text class="up" style="animation-delay:0.35s" x="0" y="196" font-size="13" fill="rgba(243,241,236,.5)">Site vitrine  ·  Administration  ·  Formulaires  ·  Hébergement</text>
 </svg>

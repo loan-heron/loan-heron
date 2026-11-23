@@ -18,7 +18,7 @@
   @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 <line x1="0" y1="1" x2="900" y2="1" stroke="rgba(14,22,38,.16)" stroke-width="1"/>
-<text class="up" style="animation-delay:0.00s" x="0" y="44" font-size="11" font-weight="500" letter-spacing="2.2" fill="rgba(14,22,38,.55)">01   ·   APPLICATION WEB · FULL-STACK</text>
+<text class="up" style="animation-delay:0.00s" x="0" y="44" font-size="11" font-weight="500" letter-spacing="2.2" fill="rgba(14,22,38,.55)">02   ·   APPLICATION WEB · FULL-STACK</text>
 <text class="up" style="animation-delay:0.00s" x="900" y="44" text-anchor="end" font-size="13.5" fill="rgba(14,22,38,.55)">halteo.loan-heron.fr  <tspan fill="#E0472A">↗</tspan></text>
 <text class="up" style="animation-delay:0.10s" x="-2" y="100" font-size="44" font-weight="300" letter-spacing="-.5" fill="#0E1626">Halteo</text>
 <text class="up" style="animation-delay:0.20s" x="0" y="138" font-size="15.5" fill="rgba(14,22,38,.78)">Application d'entraînement complète : bibliothèque d'exercices filtrable par muscle,</text>
